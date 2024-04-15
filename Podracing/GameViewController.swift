@@ -16,14 +16,20 @@ class GameViewController: UIViewController {
     @IBOutlet weak var stoneTwoView: UIImageView!
     @IBOutlet weak var mainPodView: UIImageView!
     @IBOutlet weak var enemyPodView: UIImageView!
+    @IBOutlet weak var leftButton: UIButton!
+    @IBOutlet weak var rightButton: UIButton!
     
     // MARK: - life cycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
 
-      
+      // MARK: - IBAction
     }
     
-
+    @IBAction func leftPressed(_ sender: UIButton) {
+    }
+    @IBAction func rightPressed(_ sender: UIButton) {
+    }
+    
 
 }

@@ -97,6 +97,18 @@
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C6Z-nE-GyU">
+                                <rect key="frame" x="260" y="749" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" image="right.circle" catalog="system" title="Button" cornerStyle="capsule">
+                                    <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="baseBackgroundColor" systemColor="systemBrownColor"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="rightPressed:" destination="ctK-7N-xCp" eventType="touchUpInside" id="IIt-Lt-cCz"/>
+                                </connections>
+                            </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="stoneOne " translatesAutoresizingMaskIntoConstraints="NO" id="ub7-tk-LG8">
                                 <rect key="frame" x="290" y="77" width="54" height="115"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -121,14 +133,28 @@
                                 <rect key="frame" x="94" y="92" width="90" height="179"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MtE-Uw-6Cl">
+                                <rect key="frame" x="67" y="749" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" image="left.circle" catalog="system" cornerStyle="capsule">
+                                    <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="baseBackgroundColor" systemColor="systemBrownColor"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="leftPressed:" destination="ctK-7N-xCp" eventType="touchUpInside" id="bMT-OO-mkW"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="oCh-9G-DFY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <connections>
                         <outlet property="enemyPodView" destination="PEC-XL-FTp" id="sGu-ls-vdL"/>
+                        <outlet property="leftButton" destination="MtE-Uw-6Cl" id="gwP-hF-NYI"/>
                         <outlet property="lefySideView" destination="1XE-gx-d1m" id="YYd-Yo-8ku"/>
                         <outlet property="mainPodView" destination="kPO-pQ-kHD" id="0XH-J5-O0f"/>
+                        <outlet property="rightButton" destination="C6Z-nE-GyU" id="uIw-43-Ace"/>
                         <outlet property="rightSideView" destination="Wt6-Mt-Y4u" id="ZPx-Os-Iud"/>
                         <outlet property="stoneOneView" destination="ub7-tk-LG8" id="lfR-gF-i4m"/>
                         <outlet property="stoneTwoView" destination="m0F-Qi-kfE" id="7vY-LC-SRa"/>
@@ -141,9 +167,11 @@
         </scene>
     </scenes>
     <resources>
+        <image name="left.circle" catalog="system" width="128" height="123"/>
         <image name="mainPod" width="192" height="563"/>
         <image name="menuScreen" width="430" height="932"/>
         <image name="podTwo" width="261.66665649414062" height="523.33331298828125"/>
+        <image name="right.circle" catalog="system" width="128" height="123"/>
         <image name="rightSide" width="195.33332824707031" height="1515.3333740234375"/>
         <image name="rightSideOne" width="195.33332824707031" height="1515.3333740234375"/>
         <image name="stoneOne " width="184.33332824707031" height="368.33334350585938"/>
@@ -151,6 +179,9 @@
         <image name="trackView" width="400" height="533.33331298828125"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBrownColor">
+            <color red="0.63529411764705879" green="0.51764705882352946" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
