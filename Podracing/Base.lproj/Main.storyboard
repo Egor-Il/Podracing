@@ -92,17 +92,63 @@
                     <view key="view" contentMode="scaleToFill" id="2KE-Yk-91l">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="trackView" translatesAutoresizingMaskIntoConstraints="NO" id="Dna-a3-coc">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="stoneOne " translatesAutoresizingMaskIntoConstraints="NO" id="ub7-tk-LG8">
+                                <rect key="frame" x="290" y="77" width="54" height="115"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="rightSideOne" translatesAutoresizingMaskIntoConstraints="NO" id="Wt6-Mt-Y4u">
+                                <rect key="frame" x="343" y="0.0" width="45" height="852"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="rightSide" translatesAutoresizingMaskIntoConstraints="NO" id="1XE-gx-d1m">
+                                <rect key="frame" x="0.0" y="0.0" width="45" height="852"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="stoneTwo" translatesAutoresizingMaskIntoConstraints="NO" id="m0F-Qi-kfE">
+                                <rect key="frame" x="39" y="332" width="70" height="68"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="mainPod" translatesAutoresizingMaskIntoConstraints="NO" id="kPO-pQ-kHD">
+                                <rect key="frame" x="150" y="512" width="92" height="179"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="podTwo" translatesAutoresizingMaskIntoConstraints="NO" id="PEC-XL-FTp">
+                                <rect key="frame" x="94" y="92" width="90" height="179"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="oCh-9G-DFY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <connections>
+                        <outlet property="enemyPodView" destination="PEC-XL-FTp" id="sGu-ls-vdL"/>
+                        <outlet property="lefySideView" destination="1XE-gx-d1m" id="YYd-Yo-8ku"/>
+                        <outlet property="mainPodView" destination="kPO-pQ-kHD" id="0XH-J5-O0f"/>
+                        <outlet property="rightSideView" destination="Wt6-Mt-Y4u" id="ZPx-Os-Iud"/>
+                        <outlet property="stoneOneView" destination="ub7-tk-LG8" id="lfR-gF-i4m"/>
+                        <outlet property="stoneTwoView" destination="m0F-Qi-kfE" id="7vY-LC-SRa"/>
+                        <outlet property="trackView" destination="Dna-a3-coc" id="jQJ-fv-9G5"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ecU-yh-6C8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="737" y="-27"/>
+            <point key="canvasLocation" x="736.64122137404581" y="-27.464788732394368"/>
         </scene>
     </scenes>
     <resources>
+        <image name="mainPod" width="192" height="563"/>
         <image name="menuScreen" width="430" height="932"/>
+        <image name="podTwo" width="261.66665649414062" height="523.33331298828125"/>
+        <image name="rightSide" width="195.33332824707031" height="1515.3333740234375"/>
+        <image name="rightSideOne" width="195.33332824707031" height="1515.3333740234375"/>
+        <image name="stoneOne " width="184.33332824707031" height="368.33334350585938"/>
+        <image name="stoneTwo" width="268.66665649414062" height="248.66667175292969"/>
+        <image name="trackView" width="400" height="533.33331298828125"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
