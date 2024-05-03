@@ -7,9 +7,10 @@
 
 import UIKit
 import SnapKit
-
+// MARK: - Extensions
 private extension CGFloat {
-     static let gameNameLabelOffSet: CGFloat = 70
+    static let gameNameLabelOffSet: CGFloat = 70
+    static let gameNameButtonOffSet: CGFloat = 80
 }
 private extension String {
     static let gameName = "Podracing"
@@ -21,7 +22,6 @@ private extension CGFloat {
     static let GameLabelFont:CGFloat = 45
     static let ButtonFont:CGFloat = 20
 }
-
 class ViewController: UIViewController {
     // MARK: - Property
     
@@ -57,22 +57,14 @@ class ViewController: UIViewController {
         button.titleLabel?.font = UIFont(name: "Starjedi", size: CGFloat.ButtonFont)
         return button
     }()
-    
-   /* @IBOutlet weak var menuScreen: UIImageView! +
-    @IBOutlet weak var gameNameLabel: UILabel! +
-    @IBOutlet weak var playButton: UIButton! +
-    @IBOutlet weak var boardButton: UIButton!
-    @IBOutlet weak var settingButton: UIButton! */
-    
     // MARK: - life cycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
+        configuratMenuUI()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configuratMenuUI()
     }
-    
     private func configuratMenuUI() {
         view.addSubview(menuScreen)
         view.addSubview(gameNameLabel)
@@ -90,7 +82,7 @@ class ViewController: UIViewController {
         }
         playButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(gameNameLabel.snp.bottom).offset(20)
+            make.top.equalTo(gameNameLabel.snp.bottom).offset(CGFloat.gameNameButtonOffSet)
         }
         boardButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
@@ -100,14 +92,32 @@ class ViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.top.equalTo(boardButton.snp.bottom)
         }
+        let actionPlay = UIAction { _ in
+            self.playPressed()
+        }
+        let actionSettings = UIAction { _ in
+            self.settingsPressed()
+        }
+        let actionLeaderboard = UIAction { _ in
+            self.leaderboardPressed()
+        }
+        playButton.addAction(actionPlay, for: .touchUpInside)
+        settingButton.addAction(actionSettings, for: .touchUpInside)
+        boardButton.addAction(actionLeaderboard, for: .touchUpInside)
+    }
+    private func playPressed() {
+        let controller = GameViewController()
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    private func settingsPressed() {
+        let controller = SettingsViewController()
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    private func leaderboardPressed() {
+        let controller = LeaderboardViewController()
+        navigationController?.pushViewController(controller, animated: true)
     }
     //MARK: - IBAction
     
-   /* @IBAction func playPressed(_ sender: UIButton) {
-    }
-    @IBAction func boardPressed(_ sender: UIButton) {
-    }
-    @IBAction func settingPressed(_ sender: UIButton) {
-    }*/
 }
 
