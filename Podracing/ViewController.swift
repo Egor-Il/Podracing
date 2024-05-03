@@ -18,8 +18,9 @@ class ViewController: UIViewController {
     // MARK: - life cycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
-    //MARK: - IBAction
     }
+    //MARK: - IBAction
+    
     @IBAction func playPressed(_ sender: UIButton) {
     }
     @IBAction func boardPressed(_ sender: UIButton) {
