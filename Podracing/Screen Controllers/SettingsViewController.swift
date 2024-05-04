@@ -8,27 +8,34 @@
 import UIKit
 import SnapKit
 
-private extension CGFloat  {
-    static let buttonOffSet: CGFloat = 50
-}
-
 class SettingsViewController: UIViewController {
     
     private let backButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Back", for: .normal)
-        button.setTitleColor(.black, for: .normal)
+        button.setTitle(Buttons.buttonBackLable, for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
         return button
+    }()
+    private let settingImageView: UIImageView = {
+        let image = UIImageView()
+        return image
     }()
     override func viewDidLoad() {
         super.viewDidLoad()
         configuratSettingUI()
-        view.backgroundColor = .yellow
+        view.backgroundColor = .white
     }
-        private func configuratSettingUI() {
+    private func configuratSettingUI() {
+        view.addSubview(settingImageView)
         view.addSubview(backButton)
+        let settingImage = UIImage(named: Images.settings)
+        settingImageView.image = settingImage
         backButton.snp.makeConstraints { make in
-            make.top.left.equalToSuperview().offset(CGFloat.buttonOffSet)
+            make.top.left.equalToSuperview().offset(Buttons.buttonBackOffSet)
+        }
+        settingImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
         let backPressed = UIAction { _ in
             self.backPressed()
