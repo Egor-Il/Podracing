@@ -7,21 +7,7 @@
 
 import UIKit
 import SnapKit
-// MARK: - Extensions
-private extension CGFloat {
-    static let gameNameLabelOffSet: CGFloat = 70
-    static let gameNameButtonOffSet: CGFloat = 80
-}
-private extension String {
-    static let gameName = "Podracing"
-    static let playButton = "Play"
-    static let boardButton = "Leaderboard"
-    static let settingButton = "Setting"
-}
-private extension CGFloat {
-    static let GameLabelFont:CGFloat = 45
-    static let ButtonFont:CGFloat = 20
-}
+
 class ViewController: UIViewController {
     // MARK: - Property
     
@@ -31,30 +17,30 @@ class ViewController: UIViewController {
     }()
     private let gameNameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Starjedi", size: CGFloat.GameLabelFont )
+        label.font = UIFont(name: Font.fontName, size: Font.gameLabelFont )
         label.textColor = .white
-        label.text = String.gameName
+        label.text = Labels.gameName
         return label
     }()
     private let playButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(String.playButton, for: .normal)
+        button.setTitle(Buttons.playButtonLabel, for: .normal)
         button.setTitleColor(.green, for: .normal)
-        button.titleLabel?.font = UIFont(name: "Starjedi", size: CGFloat.ButtonFont)
+        button.titleLabel?.font = UIFont(name: Font.fontName, size: Font.buttonFont)
         return button
     }()
     private let boardButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(String.boardButton, for: .normal)
+        button.setTitle(Buttons.boardButtonLabel, for: .normal)
         button.setTitleColor(.green, for: .normal)
-        button.titleLabel?.font = UIFont(name: "Starjedi", size: CGFloat.ButtonFont)
+        button.titleLabel?.font = UIFont(name: Font.fontName, size: Font.buttonFont)
         return button
     }()
     private let settingButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(String.settingButton, for: .normal)
+        button.setTitle(Buttons.settingButtonLabel, for: .normal)
         button.setTitleColor(.green, for: .normal)
-        button.titleLabel?.font = UIFont(name: "Starjedi", size: CGFloat.ButtonFont)
+        button.titleLabel?.font = UIFont(name: Font.fontName, size: Font.buttonFont)
         return button
     }()
     // MARK: - life cycle functions
@@ -71,18 +57,18 @@ class ViewController: UIViewController {
         view.addSubview(playButton)
         view.addSubview(boardButton)
         view.addSubview(settingButton)
-        let menuImage = UIImage(named: "menuScreen")
+        let menuImage = UIImage(named: Images.menu)
         menuScreen.image = menuImage
         menuScreen.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         gameNameLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(CGFloat.gameNameLabelOffSet)
+            make.top.equalToSuperview().offset(Labels.gameNameLabelOffSet)
         }
         playButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(gameNameLabel.snp.bottom).offset(CGFloat.gameNameButtonOffSet)
+            make.top.equalTo(gameNameLabel.snp.bottom).offset(Buttons.gameNameButtonOffSet)
         }
         boardButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
@@ -117,7 +103,7 @@ class ViewController: UIViewController {
         let controller = LeaderboardViewController()
         navigationController?.pushViewController(controller, animated: true)
     }
-    //MARK: - IBAction
+    
     
 }
 

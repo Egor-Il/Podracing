@@ -8,16 +8,13 @@
 import UIKit
 import SnapKit
 
-private extension CGFloat {
-    static let buttonOffSet: CGFloat = 50
-}
-
 class GameViewController: UIViewController {
     
     private let backButton: UIButton = {
          let button = UIButton(type: .system)
-        button.setTitle("Back", for: .normal)
+        button.setTitle(Buttons.buttonBackLable, for: .normal)
         button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
         return button
     }()
     enum Direction{
@@ -48,7 +45,7 @@ class GameViewController: UIViewController {
     private func configuratGameUI() {
         view.addSubview(backButton)
         backButton.snp.makeConstraints { make in
-            make.top.left.equalToSuperview().offset(CGFloat.buttonOffSet)
+            make.top.left.equalToSuperview().offset(Buttons.buttonBackOffSet)
         }
         let backActionPressed = UIAction { _ in
             self.backPressed()
