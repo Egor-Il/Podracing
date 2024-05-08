@@ -11,10 +11,7 @@ import SnapKit
 class ViewController: UIViewController {
     // MARK: - Property
     
-    private let menuScreen: UIImageView = {
-        let menuView = UIImageView()
-        return menuView
-    }()
+    private let menuScreen = UIImageView() 
     private let gameNameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: Font.fontName, size: Font.gameLabelFont )

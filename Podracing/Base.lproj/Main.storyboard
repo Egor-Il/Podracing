@@ -93,7 +93,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="trackView" translatesAutoresizingMaskIntoConstraints="NO" id="Dna-a3-coc">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="track" translatesAutoresizingMaskIntoConstraints="NO" id="Dna-a3-coc">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
@@ -113,11 +113,11 @@
                                 <rect key="frame" x="290" y="77" width="54" height="115"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="rightSide" translatesAutoresizingMaskIntoConstraints="NO" id="Wt6-Mt-Y4u">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="rightCurb" translatesAutoresizingMaskIntoConstraints="NO" id="Wt6-Mt-Y4u">
                                 <rect key="frame" x="343" y="0.0" width="50" height="852"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="leftSide" translatesAutoresizingMaskIntoConstraints="NO" id="1XE-gx-d1m">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="leftCurb" translatesAutoresizingMaskIntoConstraints="NO" id="1XE-gx-d1m">
                                 <rect key="frame" x="0.0" y="0.0" width="45" height="852"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
@@ -167,21 +167,21 @@
         </scene>
     </scenes>
     <resources>
-        <image name="arrowshape.left.fill" catalog="system" width="32" height="32"/>
-        <image name="arrowshape.right.fill" catalog="system" width="32" height="32"/>
-        <image name="leftSide" width="195.33332824707031" height="1515.3333740234375"/>
+        <image name="arrowshape.left.fill" catalog="system" width="128" height="104"/>
+        <image name="arrowshape.right.fill" catalog="system" width="128" height="104"/>
+        <image name="leftCurb" width="195.33332824707031" height="1515.3333740234375"/>
         <image name="mainPod" width="192" height="563"/>
         <image name="menuScreen" width="430" height="932"/>
         <image name="podTwo" width="261.66665649414062" height="523.33331298828125"/>
-        <image name="rightSide" width="195.33332824707031" height="1515.3333740234375"/>
+        <image name="rightCurb" width="195.33332824707031" height="1515.3333740234375"/>
         <image name="stoneOne " width="184.33332824707031" height="368.33334350585938"/>
         <image name="stoneTwo" width="268.66665649414062" height="248.66667175292969"/>
-        <image name="trackView" width="400" height="533.33331298828125"/>
+        <image name="track" width="400" height="533.33331298828125"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBrownColor">
-            <color red="0.63529411759999999" green="0.51764705879999995" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.63529411764705879" green="0.51764705882352946" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
