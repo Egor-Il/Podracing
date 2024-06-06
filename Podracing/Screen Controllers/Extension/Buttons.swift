@@ -14,7 +14,9 @@ final class Buttons {
     static let settingButtonLabel: String = "Setting"
     
     static let gameNameButtonOffSet: CGFloat = 80
+    static let buttonsConteinerHeight: CGFloat = 150
+    
     //MARK: - Back button
-    static let buttonBackOffSet: CGFloat = 50
+    static let buttonOffSet: CGFloat = 50
     static let buttonBackLable: String = "Back"
 }

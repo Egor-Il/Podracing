@@ -32,7 +32,7 @@ class SettingsViewController: UIViewController {
         let settingImage = UIImage(named: Images.settings)
         settingImageView.image = settingImage
         backButton.snp.makeConstraints { make in
-            make.top.left.equalToSuperview().offset(Buttons.buttonBackOffSet)
+            make.top.left.equalToSuperview().offset(Buttons.buttonOffSet)
         }
         settingImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
