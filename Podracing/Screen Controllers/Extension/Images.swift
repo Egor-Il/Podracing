@@ -14,5 +14,8 @@ final class Images {
     static let leftCurb: String = "leftCurb"
     static let rightCurb: String = "rightCurb"
     static let mainPod: String = "mainPod"
-    
+    static let podTwo: String = "podTwo"
+    static let podThree: String = "podThree"
+    static let firstRock: String = "stoneOne"
+    static let secondRock: String = "stoneTwo"
 }

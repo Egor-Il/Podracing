@@ -19,6 +19,7 @@ class ViewController: UIViewController {
         label.text = Labels.gameName
         return label
     }()
+    private let buttonsConteiner = UIView()
     private let playButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(Buttons.playButtonLabel, for: .normal)
@@ -44,6 +45,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configuratMenuUI()
+      
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -51,9 +53,11 @@ class ViewController: UIViewController {
     private func configuratMenuUI() {
         view.addSubview(menuScreen)
         view.addSubview(gameNameLabel)
-        view.addSubview(playButton)
-        view.addSubview(boardButton)
-        view.addSubview(settingButton)
+        buttonsConteiner.addSubview(playButton)
+        buttonsConteiner.addSubview(boardButton)
+        buttonsConteiner.addSubview(settingButton)
+        view.addSubview(buttonsConteiner)
+      
         let menuImage = UIImage(named: Images.menu)
         menuScreen.image = menuImage
         menuScreen.snp.makeConstraints { make in
@@ -63,9 +67,14 @@ class ViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.top.equalToSuperview().offset(Labels.gameNameLabelOffSet)
         }
+        buttonsConteiner.snp.makeConstraints { make in
+            make.top.equalTo(gameNameLabel.snp.bottom).offset(Buttons.buttonOffSet)
+            make.left.right.equalToSuperview()
+            make.height.equalTo(Buttons.buttonsConteinerHeight)
+        }
         playButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(gameNameLabel.snp.bottom).offset(Buttons.gameNameButtonOffSet)
+            make.top.equalToSuperview()
         }
         boardButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
@@ -100,7 +109,5 @@ class ViewController: UIViewController {
         let controller = LeaderboardViewController()
         navigationController?.pushViewController(controller, animated: true)
     }
-    
-    
 }
 
