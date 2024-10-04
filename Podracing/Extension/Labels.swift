@@ -8,7 +8,7 @@
 import Foundation
 
 final class Labels {
-    //MARK: - Menu labels
+
     static let gameName = "Podracing"
     static let gameNameLabelOffSet: CGFloat = 70
 }
