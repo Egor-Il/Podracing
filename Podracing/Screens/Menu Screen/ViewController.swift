@@ -45,7 +45,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configuratMenuUI()
-      
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -57,7 +57,7 @@ class ViewController: UIViewController {
         buttonsConteiner.addSubview(boardButton)
         buttonsConteiner.addSubview(settingButton)
         view.addSubview(buttonsConteiner)
-      
+        
         let menuImage = UIImage(named: Images.menu)
         menuScreen.image = menuImage
         menuScreen.snp.makeConstraints { make in

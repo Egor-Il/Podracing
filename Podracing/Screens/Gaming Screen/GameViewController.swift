@@ -31,7 +31,7 @@ class GameViewController: UIViewController {
     private let backButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(Buttons.buttonBackLable, for: .normal)
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(.green, for: .normal)
         button.titleLabel?.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
         return button
     }()
@@ -99,23 +99,30 @@ class GameViewController: UIViewController {
     private var timetForRockOne = Timer()
     private var timetForRockTwo = Timer()
     
-    
     enum Direction{
         case left
         case right
     }
     
+    var chosenPod: Any = ""
+    var chosenName: Any = ""
+    var chosenBarrier: Any = ""
+    
+    
     // MARK: - life cycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
+      //  loadSettings()
         configurationGameUI()
         view.backgroundColor = .white
+        
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
     // MARK: - UI configutarion
     private func configurationGameUI() {
+        loadSettings()
         view.addSubview(track)
         view.addSubview(leftCurb)
         view.addSubview(rightCurb)
@@ -126,6 +133,15 @@ class GameViewController: UIViewController {
         view.addSubview(leftButton)
         view.addSubview(rightButton)
         view.addSubview(backButton)
+        
+        
+       
+       // let chosenPod = UserDefaults.standard.object(forKey: SettingsKeys.pod)
+       // print(chosenPod as Any)
+       //var loadChosenPod = PodImages.shared?.podArray[chosenPod]
+        
+       // mainPod.image = loadChosenPod
+       
         // MARK: - Track constraints
         track.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -182,7 +198,6 @@ class GameViewController: UIViewController {
         timetForRockOne.fire()
         timetForRockTwo.fire()
         podAnimation()
-        
         // MARK: - Buttons setups
         let backActionPressed = UIAction { _ in
             self.backPressed()
@@ -199,7 +214,7 @@ class GameViewController: UIViewController {
     }
     // MARK: - Action func
     private func backPressed() {
-        recordTime()
+     //   recordTime()
         navigationController?.popViewController(animated: true)
         
     }
@@ -264,17 +279,21 @@ class GameViewController: UIViewController {
         UIView.animate(withDuration: 8, delay: 2.3, options: [.curveLinear]) {
             self.rockTwo.frame.origin.y += self.view.frame.height + self.rockTwo.frame.height
         }
-        
-
     }
-    func recordTime() {
-        let savedDate = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM d, yyyy, HH:mm"
-        let savedRaceDate = formatter.string(from: savedDate)
-        print(savedRaceDate)
-        LeaderboardViewController().leaderboardText.text = savedRaceDate
+    private func loadSettings() {
+        chosenPod = UserDefaults.standard.object(forKey: SettingsKeys.pod) as Any
+        chosenName = UserDefaults.standard.object(forKey: SettingsKeys.playerName)!
+        chosenBarrier = UserDefaults.standard.object(forKey: SettingsKeys.barrier) ?? 0
+        print() // какой вариант лучше?
     }
+//    func recordTime() {
+//        let savedDate = Date()
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "MMMM d, yyyy, HH:mm"
+//        let savedRaceDate = formatter.string(from: savedDate)
+//        print(savedRaceDate)
+//        LeaderboardViewController().leaderboardText.text = savedRaceDate
+//    }
     // MARK: - IBAction
     
     
