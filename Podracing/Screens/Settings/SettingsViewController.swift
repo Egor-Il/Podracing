@@ -104,6 +104,7 @@ class SettingsViewController: UIViewController {
     }
     // MARK: - UI configutarion
     private func configuratSettingUI() {
+        load()
         configuratNotifications()
         view.addSubview(settingImageView)
         view.addSubview(backButton)
@@ -228,11 +229,12 @@ class SettingsViewController: UIViewController {
     }
     private func save() {
         
-        let savedPod = PodImages.shared?.podArray[currentPodIndex] // не помню зачем
+       /* let savedPod = PodImages.shared?.podArray[currentPodIndex]*/ // не помню зачем
 //        print(savedPod as Any)
         UserDefaults.standard.setValue(currentPodIndex, forKey: SettingsKeys.pod)
         UserDefaults.standard.setValue(currentBarrierIndex, forKey: SettingsKeys.barrier)
         UserDefaults.standard.setValue(currentPlayerName, forKey: SettingsKeys.playerName)
+        print("end save")
         // - сохранять одной строчкой?
         
         print(
@@ -241,6 +243,14 @@ class SettingsViewController: UIViewController {
             UserDefaults.standard.value(forKey: SettingsKeys.playerName)!
         )
     }
+    private func load() {
+        
+        UserDefaults.standard.setValue(currentPodIndex, forKey: SettingsKeys.pod)
+        UserDefaults.standard.setValue(currentBarrierIndex, forKey: SettingsKeys.barrier)
+        UserDefaults.standard.setValue(currentPlayerName, forKey: SettingsKeys.playerName)
+        print("end load")
+    }
+    
     private func configuratNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)

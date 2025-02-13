@@ -8,7 +8,25 @@
 import UIKit
 import SnapKit
 
-private extension Int {
+//private extension Int {
+//    static let podWidth = 70
+//    static let podHeight = 180
+//    static let podEnemyWidth = 70
+//    static let podEnemyHeight = 180
+//    static let rockOneWidth = 54
+//    static let rockOneHeight = 115
+//    static let rockTwoWidth = 70
+//    static let rockTwoHeight = 70
+//    static var podPointX = 0
+//    static var podPointY = 0
+//    static let curbWidth = 45
+//    static let movementButtonSize = 50
+//    static let movementButtonOffSetSides = 50
+//    static let movementButtonOffSetBottom = 30
+//    static let podMovementStep = 25
+//}
+
+private enum Constraint {
     static let podWidth = 70
     static let podHeight = 180
     static let podEnemyWidth = 70
@@ -95,6 +113,7 @@ class GameViewController: UIViewController {
         pod.image = enemyPod
         return pod
     }()
+    
     private var timerForEnemyPod = Timer()
     private var timetForRockOne = Timer()
     private var timetForRockTwo = Timer()
@@ -104,9 +123,9 @@ class GameViewController: UIViewController {
         case right
     }
     
-    var chosenPod: Any = ""
-    var chosenName: Any = ""
-    var chosenBarrier: Any = ""
+//    var chosenPod: Any = ""
+//    var chosenName: Any = ""
+//    var chosenBarrier: Any = ""
     
     
     // MARK: - life cycle functions
@@ -114,15 +133,15 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
       //  loadSettings()
         configurationGameUI()
-        view.backgroundColor = .white
+     //   view.backgroundColor = .white
         
     }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//    }
     // MARK: - UI configutarion
     private func configurationGameUI() {
-        loadSettings()
+       // loadSettings()
         view.addSubview(track)
         view.addSubview(leftCurb)
         view.addSubview(rightCurb)
@@ -150,39 +169,39 @@ class GameViewController: UIViewController {
             make.left.equalToSuperview()
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.width.equalTo(Int.curbWidth)
+            make.width.equalTo(Constraint.curbWidth)
         }
         rightCurb.snp.makeConstraints { make in
             make.right.equalToSuperview()
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.width.equalTo(Int.curbWidth)
+            make.width.equalTo(Constraint.curbWidth)
         }
         // MARK: - Buttons constraints
         backButton.snp.makeConstraints { make in
             make.top.left.equalToSuperview().offset(Buttons.buttonOffSet)
         }
         leftButton.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(Int.movementButtonOffSetSides)
-            make.bottom.equalToSuperview().inset(Int.movementButtonOffSetBottom)
-            make.width.height.equalTo(Int.movementButtonSize)
+            make.left.equalToSuperview().offset(Constraint.movementButtonOffSetSides)
+            make.bottom.equalToSuperview().inset(Constraint.movementButtonOffSetBottom)
+            make.width.height.equalTo(Constraint.movementButtonSize)
         }
-        leftButton.layer.cornerRadius = CGFloat(Int.movementButtonSize / 2)
+        leftButton.layer.cornerRadius = CGFloat(Constraint.movementButtonSize / 2)
         leftButton.clipsToBounds = true
         rightButton.snp.makeConstraints { make in
-            make.right.equalToSuperview().inset(Int.movementButtonOffSetSides)
-            make.bottom.equalToSuperview().inset(Int.movementButtonOffSetBottom)
-            make.width.height.equalTo(Int.movementButtonSize)
+            make.right.equalToSuperview().inset(Constraint.movementButtonOffSetSides)
+            make.bottom.equalToSuperview().inset(Constraint.movementButtonOffSetBottom)
+            make.width.height.equalTo(Constraint.movementButtonSize)
         }
-        rightButton.layer.cornerRadius = CGFloat(Int.movementButtonSize / 2)
+        rightButton.layer.cornerRadius = CGFloat(Constraint.movementButtonSize / 2)
         rightButton.clipsToBounds = true
         // MARK: - View position
-        Int.podPointX = Int(view.frame.width / 2) - Int.podWidth / 2
-        Int.podPointY = Int(view.frame.height / 1.45)
-        mainPod.frame = CGRect(x: Int.podPointX, y: Int.podPointY, width: Int.podWidth, height: Int.podHeight)
-        enemyPod.frame = CGRect(x: 0, y: 0, width: Int.podEnemyWidth , height: Int.podEnemyHeight)
-        rockOne.frame = CGRect(x: 0, y: 0, width: Int.rockOneWidth, height: Int.rockOneHeight)
-        rockTwo.frame = CGRect(x: 0, y: 0, width: Int.rockTwoWidth, height: Int.rockTwoHeight)
+        Constraint.podPointX = Int(view.frame.width / 2) - Constraint.podWidth / 2
+        Constraint.podPointY = Int(view.frame.height / 1.45)
+        mainPod.frame = CGRect(x: Constraint.podPointX, y: Constraint.podPointY, width: Constraint.podWidth, height: Constraint.podHeight)
+        enemyPod.frame = CGRect(x: 0, y: 0, width: Constraint.podEnemyWidth , height: Constraint.podEnemyHeight)
+        rockOne.frame = CGRect(x: 0, y: 0, width: Constraint.rockOneWidth, height: Constraint.rockOneHeight)
+        rockTwo.frame = CGRect(x: 0, y: 0, width: Constraint.rockTwoWidth, height: Constraint.rockTwoHeight)
         
         // MARK: - Animation function call
         timerForEnemyPod = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in
@@ -216,19 +235,20 @@ class GameViewController: UIViewController {
     private func backPressed() {
      //   recordTime()
         navigationController?.popViewController(animated: true)
+       
         
     }
     private func shipMovment(to direction:Direction) {
         switch direction {
-        case.left:  if mainPod.frame.origin.x > self.view.frame.origin.x + CGFloat(Int.podMovementStep)  {
+        case.left:  if mainPod.frame.origin.x > self.view.frame.origin.x + CGFloat(Constraint.podMovementStep)  {
             UIView.animate(withDuration: 0.3) {
-                self.mainPod.frame.origin.x -= CGFloat(Int.podMovementStep)
+                self.mainPod.frame.origin.x -= CGFloat(Constraint.podMovementStep)
             }
         }
         case .right:
-            if mainPod.frame.origin.x + mainPod.frame.width < self.view.frame.width - CGFloat(Int.podMovementStep) {
+            if mainPod.frame.origin.x + mainPod.frame.width < self.view.frame.width - CGFloat(Constraint.podMovementStep) {
                 UIView.animate(withDuration: 0.3) {
-                    self.mainPod.frame.origin.x += CGFloat(Int.podMovementStep)
+                    self.mainPod.frame.origin.x += CGFloat(Constraint.podMovementStep)
                 }
             }
         }
@@ -250,9 +270,9 @@ class GameViewController: UIViewController {
         }
     }
     private func enemyPodAnimation () {
-        enemyPod.frame = CGRect(x: 0, y: Int(view.frame.minY - enemyPod.frame.height), width: Int.podEnemyWidth , height: Int.podEnemyHeight)
-        let minPosition = view.frame.origin.x + CGFloat(Int.podEnemyWidth)
-        let maxPosition = view.frame.width - CGFloat(Int.podEnemyWidth)
+        enemyPod.frame = CGRect(x: 0, y: Int(view.frame.minY - enemyPod.frame.height), width: Constraint.podEnemyWidth , height: Constraint.podEnemyHeight)
+        let minPosition = view.frame.origin.x + CGFloat(Constraint.podEnemyWidth)
+        let maxPosition = view.frame.width - CGFloat(Constraint.podEnemyWidth)
         let enemyPosition = CGFloat.random(in: minPosition...maxPosition)
         self.enemyPod.center.x = enemyPosition
         UIView.animate(withDuration: 8, delay: 0.3, options: [.curveLinear]) {
@@ -261,9 +281,9 @@ class GameViewController: UIViewController {
     }
     
     private func rockOneAnimation () {
-        rockOne.frame = CGRect(x: 0, y: Int(view.frame.minY - rockOne.frame.height) , width: Int.rockOneWidth, height: Int.rockOneHeight)
-        let minPosition = view.frame.origin.y + CGFloat(Int.rockOneWidth)
-        let maxPosition = view.frame.width - CGFloat(Int.rockOneWidth)
+        rockOne.frame = CGRect(x: 0, y: Int(view.frame.minY - rockOne.frame.height) , width: Constraint.rockOneWidth, height: Constraint.rockOneHeight)
+        let minPosition = view.frame.origin.y + CGFloat(Constraint.rockOneWidth)
+        let maxPosition = view.frame.width - CGFloat(Constraint.rockOneWidth)
         let rockOnePosition = CGFloat.random(in: minPosition...maxPosition)
         self.rockOne.center.x = rockOnePosition
         UIView.animate(withDuration: 8, delay: 1.3, options: [.curveLinear]) {
@@ -271,21 +291,25 @@ class GameViewController: UIViewController {
         }
     }
     private func rockTwoAnimation () {
-        rockTwo.frame = CGRect(x: 0, y: Int(view.frame.minY - rockTwo.frame.height) , width: Int.rockTwoWidth, height: Int.rockTwoHeight)
-        let minPosition = view.frame.origin.x + CGFloat(Int.rockTwoWidth)
-        let maxPosition = view.frame.width - CGFloat(Int.rockTwoWidth)
+        rockTwo.frame = CGRect(x: 0, y: Int(view.frame.minY - rockTwo.frame.height) , width: Constraint.rockTwoWidth, height: Constraint.rockTwoHeight)
+        let minPosition = view.frame.origin.x + CGFloat(Constraint.rockTwoWidth)
+        let maxPosition = view.frame.width - CGFloat(Constraint.rockTwoWidth)
         let rockTwoPosition = CGFloat.random(in: minPosition...maxPosition) // - надо создать одну переменную на все обьекты 
         self.rockTwo.center.x = rockTwoPosition
         UIView.animate(withDuration: 8, delay: 2.3, options: [.curveLinear]) {
             self.rockTwo.frame.origin.y += self.view.frame.height + self.rockTwo.frame.height
         }
     }
-    private func loadSettings() {
-        chosenPod = UserDefaults.standard.object(forKey: SettingsKeys.pod) as Any
-        chosenName = UserDefaults.standard.object(forKey: SettingsKeys.playerName)!
-        chosenBarrier = UserDefaults.standard.object(forKey: SettingsKeys.barrier) ?? 0
-        print() // какой вариант лучше?
+    
+    private func gameOver() {
+        
     }
+//    private func loadSettings() {
+//        chosenPod = UserDefaults.standard.object(forKey: SettingsKeys.pod) as Any
+//        chosenName = UserDefaults.standard.object(forKey: SettingsKeys.playerName)!
+//        chosenBarrier = UserDefaults.standard.object(forKey: SettingsKeys.barrier) ?? 0
+//        print() // какой вариант лучше?
+//    }
 //    func recordTime() {
 //        let savedDate = Date()
 //        let formatter = DateFormatter()
