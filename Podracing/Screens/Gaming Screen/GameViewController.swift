@@ -108,11 +108,18 @@ class GameViewController: UIViewController {
         return secondRock
     }()
     private var enemyPod: UIImageView = {
-        var pod = UIImageView()
+        let pod = UIImageView()
         let enemyPod = UIImage(named: Images.podTwo)
         pod.image = enemyPod
         return pod
     }()
+    
+//    private lazy var explosion: UIImageView = {
+//        let explosion = UIImageView()
+//        let explosionPic = UIImage(named: "explosionOne")
+//        explosion.image = explosionPic
+//        return explosion
+//    }()
     
     private var timerForEnemyPod = Timer()
     private var timetForRockOne = Timer()
@@ -123,25 +130,27 @@ class GameViewController: UIViewController {
         case right
     }
     
-//    var chosenPod: Any = ""
-//    var chosenName: Any = ""
-//    var chosenBarrier: Any = ""
+    private var podStartPosition: CGPoint = .zero // записываем стартовоую вычисленную точку что бы использовать ее для рестарата
+    
+    private var displayLink: CADisplayLink?
+    //    var chosenPod: Any = ""
+    //    var chosenName: Any = ""
+    //    var chosenBarrier: Any = ""
     
     
     // MARK: - life cycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
-      //  loadSettings()
+        //  loadSettings()
         configurationGameUI()
-     //   view.backgroundColor = .white
-        
     }
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        startGame()
+    }
     // MARK: - UI configutarion
     private func configurationGameUI() {
-       // loadSettings()
+        // loadSettings()
         view.addSubview(track)
         view.addSubview(leftCurb)
         view.addSubview(rightCurb)
@@ -153,14 +162,11 @@ class GameViewController: UIViewController {
         view.addSubview(rightButton)
         view.addSubview(backButton)
         
+        // let chosenPod = UserDefaults.standard.object(forKey: SettingsKeys.pod)
+        // print(chosenPod as Any)
+        //var loadChosenPod = PodImages.shared?.podArray[chosenPod]
+        // mainPod.image = loadChosenPod
         
-       
-       // let chosenPod = UserDefaults.standard.object(forKey: SettingsKeys.pod)
-       // print(chosenPod as Any)
-       //var loadChosenPod = PodImages.shared?.podArray[chosenPod]
-        
-       // mainPod.image = loadChosenPod
-       
         // MARK: - Track constraints
         track.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -198,25 +204,18 @@ class GameViewController: UIViewController {
         // MARK: - View position
         Constraint.podPointX = Int(view.frame.width / 2) - Constraint.podWidth / 2
         Constraint.podPointY = Int(view.frame.height / 1.45)
+        
         mainPod.frame = CGRect(x: Constraint.podPointX, y: Constraint.podPointY, width: Constraint.podWidth, height: Constraint.podHeight)
+        podStartPosition = CGPoint(x: Constraint.podPointX, y: Constraint.podPointY) // записываем стартовоую вычисленную точку что бы использовать ее для рестарата
+        
         enemyPod.frame = CGRect(x: 0, y: 0, width: Constraint.podEnemyWidth , height: Constraint.podEnemyHeight)
         rockOne.frame = CGRect(x: 0, y: 0, width: Constraint.rockOneWidth, height: Constraint.rockOneHeight)
         rockTwo.frame = CGRect(x: 0, y: 0, width: Constraint.rockTwoWidth, height: Constraint.rockTwoHeight)
         
         // MARK: - Animation function call
-        timerForEnemyPod = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in
-            self.enemyPodAnimation ()
-        })
-        timetForRockOne = Timer.scheduledTimer(withTimeInterval: 12, repeats: true, block: { _ in
-            self.rockOneAnimation()
-        })
-        timetForRockTwo = Timer.scheduledTimer(withTimeInterval: 14, repeats: true, block: { _ in
-                self.rockTwoAnimation()
-        })
-        timerForEnemyPod.fire()
-        timetForRockOne.fire()
-        timetForRockTwo.fire()
+        startTimerForObstacles()
         podAnimation()
+        
         // MARK: - Buttons setups
         let backActionPressed = UIAction { _ in
             self.backPressed()
@@ -233,10 +232,34 @@ class GameViewController: UIViewController {
     }
     // MARK: - Action func
     private func backPressed() {
-     //   recordTime()
-        navigationController?.popViewController(animated: true)
-       
+        let alert = UIAlertController(title: "Are you sure you want to exit the game", message: "all progress will be lost", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Exit", style: .destructive, handler: { _ in
+            self.navigationController?.popToRootViewController(animated: true)
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(alert, animated: true)
+        //   recordTime()
         
+    }
+    private func startTimerForObstacles() {
+        timerForEnemyPod = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { [weak self] _ in
+            self?.enemyPodAnimation ()
+        }) // weak для недопущения утечки памяти
+        timetForRockOne = Timer.scheduledTimer(withTimeInterval: 12, repeats: true, block: {  [weak self] _ in
+            self?.rockOneAnimation()
+        }) // weak для недопущения утечки памяти
+        timetForRockTwo = Timer.scheduledTimer(withTimeInterval: 14, repeats: true, block: { [weak self] _ in
+            self?.rockTwoAnimation()
+        })  // weak для недопущения утечки памяти
+        timerForEnemyPod.fire()
+        timetForRockOne.fire()
+        timetForRockTwo.fire()
+    }
+    
+    private func pauseTimerForObstacles() {
+        timerForEnemyPod.invalidate()
+        timetForRockOne.invalidate()
+        timetForRockTwo.invalidate()
     }
     private func shipMovment(to direction:Direction) {
         switch direction {
@@ -253,28 +276,22 @@ class GameViewController: UIViewController {
             }
         }
     }
+    
     private func podAnimation() {
-        UIView.animate(withDuration: 0.3) {
-            self.mainPod.frame.origin.x += 1
-            self.mainPod.frame.origin.y += 1
-        } completion: { _ in
-            self.podAnimationSecond()
+        UIView.animateKeyframes(withDuration: 0.3, delay: 0, options: [.autoreverse, .repeat]) {
+            self.mainPod.transform = CGAffineTransform(translationX: 1, y: 1)
+            // self.mainPod.transform = CGAffineTransform(scaleX: 1.1, y: 1.1) другой вид анимации
         }
     }
-    private func podAnimationSecond() {
-        UIView.animate(withDuration: 0.3) {
-            self.mainPod.frame.origin.x -= 1
-            self.mainPod.frame.origin.y -= 1
-        } completion: { _ in
-            self.podAnimation()
-        }
-    }
+    
     private func enemyPodAnimation () {
         enemyPod.frame = CGRect(x: 0, y: Int(view.frame.minY - enemyPod.frame.height), width: Constraint.podEnemyWidth , height: Constraint.podEnemyHeight)
         let minPosition = view.frame.origin.x + CGFloat(Constraint.podEnemyWidth)
         let maxPosition = view.frame.width - CGFloat(Constraint.podEnemyWidth)
+        
         let enemyPosition = CGFloat.random(in: minPosition...maxPosition)
         self.enemyPod.center.x = enemyPosition
+        
         UIView.animate(withDuration: 8, delay: 0.3, options: [.curveLinear]) {
             self.enemyPod.frame.origin.y += self.view.frame.height + self.enemyPod.frame.height
         }
@@ -294,30 +311,129 @@ class GameViewController: UIViewController {
         rockTwo.frame = CGRect(x: 0, y: Int(view.frame.minY - rockTwo.frame.height) , width: Constraint.rockTwoWidth, height: Constraint.rockTwoHeight)
         let minPosition = view.frame.origin.x + CGFloat(Constraint.rockTwoWidth)
         let maxPosition = view.frame.width - CGFloat(Constraint.rockTwoWidth)
-        let rockTwoPosition = CGFloat.random(in: minPosition...maxPosition) // - надо создать одну переменную на все обьекты 
+        let rockTwoPosition = CGFloat.random(in: minPosition...maxPosition) // - надо создать одну переменную на все обьекты
         self.rockTwo.center.x = rockTwoPosition
         UIView.animate(withDuration: 8, delay: 2.3, options: [.curveLinear]) {
             self.rockTwo.frame.origin.y += self.view.frame.height + self.rockTwo.frame.height
         }
     }
     
-    private func gameOver() {
-        
+    private func startGame() {
+        displayLink = CADisplayLink(target: self, selector: #selector(checkCollision))
+        displayLink?.add(to: .main, forMode: .default)
     }
-//    private func loadSettings() {
-//        chosenPod = UserDefaults.standard.object(forKey: SettingsKeys.pod) as Any
-//        chosenName = UserDefaults.standard.object(forKey: SettingsKeys.playerName)!
-//        chosenBarrier = UserDefaults.standard.object(forKey: SettingsKeys.barrier) ?? 0
-//        print() // какой вариант лучше?
-//    }
-//    func recordTime() {
-//        let savedDate = Date()
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "MMMM d, yyyy, HH:mm"
-//        let savedRaceDate = formatter.string(from: savedDate)
-//        print(savedRaceDate)
-//        LeaderboardViewController().leaderboardText.text = savedRaceDate
-//    }
+    private func reStartGame() {
+        
+        
+        
+        mainPod.frame.origin = podStartPosition
+        leftButton.isEnabled = true
+        rightButton.isEnabled = true
+        startGame()
+        podAnimation()
+        startTimerForObstacles()
+    }
+    
+    private func gameOver() {
+        displayLink?.invalidate()
+        displayLink = nil
+    
+        view.subviews.forEach { $0.layer.removeAllAnimations() }
+        
+        freezeAnimations()
+        pauseTimerForObstacles()
+        let alert = UIAlertController(title: "Game Over", message: "Yor record is ", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Exit", style: .default, handler: { _ in
+            self.exitToMainMenu()
+        }))
+        alert.addAction(UIAlertAction(title: "Restart", style: .default, handler: { _ in
+            self.reStartGame()
+        }))
+        present(alert,animated: true)
+    }
+    
+    private func freezeAnimations() {
+        view.subviews.forEach { subview in
+            let layer = subview.layer
+            // 1. Получаем текущее положение
+            if let presentationLayer = layer.presentation() {
+                layer.position = presentationLayer.position
+                layer.transform = presentationLayer.transform
+            }
+            // 2. Удаляем все текущие анимации
+            layer.removeAllAnimations()
+        }
+    }
+    
+    @objc private func checkCollision() {
+        guard let mainFrame = mainPod.layer.presentation()?.frame,
+              let enemyFrame = enemyPod.layer.presentation()?.frame,
+              let rockOneFrame = rockOne.layer.presentation()?.frame,
+              let rockTwoFrame = rockTwo.layer.presentation()?.frame else { return }
+
+        var explosionCenter: CGPoint?
+
+        if mainFrame.intersects(enemyFrame) {
+            explosionCenter = CGPoint(x: (mainFrame.midX + enemyFrame.midX) / 2,
+                                      y: (mainFrame.midY + enemyFrame.midY) / 2)
+        } else if mainFrame.intersects(rockOneFrame) {
+            explosionCenter = CGPoint(x: (mainFrame.midX + rockOneFrame.midX) / 2,
+                                      y: (mainFrame.midY + rockOneFrame.midY) / 2)
+        } else if mainFrame.intersects(rockTwoFrame) {
+            explosionCenter = CGPoint(x: (mainFrame.midX + rockTwoFrame.midX) / 2,
+                                      y: (mainFrame.midY + rockTwoFrame.midY) / 2)
+        }
+        if let center = explosionCenter {
+          
+            explosionAnimation(at: center)
+            leftButton.isEnabled = false
+            rightButton.isEnabled = false
+            gameOver()
+        }
+    }
+
+    private func explosionAnimation(at center: CGPoint) {
+        let explosionSize = CGSize(width: 100, height: 100)
+        let explosion = UIImageView(image: UIImage(named: "explosionOne"))
+        
+        // Устанавливаем координаты так, чтобы центр совпадал
+        explosion.frame = CGRect(
+            x: center.x - explosionSize.width / 2,
+            y: center.y - explosionSize.height / 2,
+            width: explosionSize.width,
+            height: explosionSize.height
+        )
+        explosion.alpha = 0
+        view.addSubview(explosion)
+
+        UIView.animate(withDuration: 0.3, animations: {
+            explosion.alpha = 1
+        }) { _ in
+            UIView.animate(withDuration: 0.5, delay: 0.3, options: [], animations: {
+                explosion.alpha = 0
+            }) { _ in
+                explosion.removeFromSuperview()
+            }
+        }
+    }
+    private func exitToMainMenu() {
+        navigationController?.popToRootViewController(animated: true)
+    }
+
+    //    private func loadSettings() {
+    //        chosenPod = UserDefaults.standard.object(forKey: SettingsKeys.pod) as Any
+    //        chosenName = UserDefaults.standard.object(forKey: SettingsKeys.playerName)!
+    //        chosenBarrier = UserDefaults.standard.object(forKey: SettingsKeys.barrier) ?? 0
+    //        print() // какой вариант лучше?
+    //    }
+    //    func recordTime() {
+    //        let savedDate = Date()
+    //        let formatter = DateFormatter()
+    //        formatter.dateFormat = "MMMM d, yyyy, HH:mm"
+    //        let savedRaceDate = formatter.string(from: savedDate)
+    //        print(savedRaceDate)
+    //        LeaderboardViewController().leaderboardText.text = savedRaceDate
+    //    }
     // MARK: - IBAction
     
     
