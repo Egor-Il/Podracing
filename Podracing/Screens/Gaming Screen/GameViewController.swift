@@ -44,7 +44,7 @@ private enum Constraint {
     static let podMovementStep = 25
 }
 
-class GameViewController: UIViewController {
+final class GameViewController: UIViewController {
     // MARK: - Property
     private let backButton: UIButton = {
         let button = UIButton(type: .system)
@@ -53,6 +53,7 @@ class GameViewController: UIViewController {
         button.titleLabel?.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
         return button
     }()
+    
     private let leftButton: UIButton = {
         var button = UIButton(type: .system)
         if let leftArrowImage = UIImage(systemName: "arrowshape.left.fill") {
@@ -62,6 +63,7 @@ class GameViewController: UIViewController {
         }
         return button
     }()
+    
     private let rightButton: UIButton = {
         let button = UIButton(type: .system)
         if let leftArrowImage = UIImage(systemName: "arrowshape.right.fill") {
@@ -114,6 +116,15 @@ class GameViewController: UIViewController {
         return pod
     }()
     
+    private lazy var scoreLable: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
+        label.textColor = .white
+        label.text = "Score: \(score)"
+        
+        return label
+    }()
+    
 //    private lazy var explosion: UIImageView = {
 //        let explosion = UIImageView()
 //        let explosionPic = UIImage(named: "explosionOne")
@@ -133,6 +144,10 @@ class GameViewController: UIViewController {
     private var podStartPosition: CGPoint = .zero // записываем стартовоую вычисленную точку что бы использовать ее для рестарата
     
     private var displayLink: CADisplayLink?
+    private var enemyPodPassed = false
+    private var rockOnePassed = false
+    private var rockTwoPassed = false
+    private var score: Int = 0
     //    var chosenPod: Any = ""
     //    var chosenName: Any = ""
     //    var chosenBarrier: Any = ""
@@ -161,6 +176,7 @@ class GameViewController: UIViewController {
         view.addSubview(leftButton)
         view.addSubview(rightButton)
         view.addSubview(backButton)
+        view.addSubview(scoreLable)
         
         // let chosenPod = UserDefaults.standard.object(forKey: SettingsKeys.pod)
         // print(chosenPod as Any)
@@ -186,6 +202,10 @@ class GameViewController: UIViewController {
         // MARK: - Buttons constraints
         backButton.snp.makeConstraints { make in
             make.top.left.equalToSuperview().offset(Buttons.buttonOffSet)
+        }
+        scoreLable.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(Buttons.buttonOffSet)
+            make.right.equalToSuperview().inset(Buttons.buttonOffSet)
         }
         leftButton.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(Constraint.movementButtonOffSetSides)
@@ -323,15 +343,14 @@ class GameViewController: UIViewController {
         displayLink?.add(to: .main, forMode: .default)
     }
     private func reStartGame() {
-        
-        
-        
         mainPod.frame.origin = podStartPosition
         leftButton.isEnabled = true
         rightButton.isEnabled = true
         startGame()
         podAnimation()
         startTimerForObstacles()
+        score = 0
+        scoreLable.text = "Score: \(score)"
     }
     
     private func gameOver() {
@@ -342,7 +361,7 @@ class GameViewController: UIViewController {
         
         freezeAnimations()
         pauseTimerForObstacles()
-        let alert = UIAlertController(title: "Game Over", message: "Yor record is ", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Game Over", message: "Yor record is \(score)", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Exit", style: .default, handler: { _ in
             self.exitToMainMenu()
         }))
@@ -372,7 +391,37 @@ class GameViewController: UIViewController {
               let rockTwoFrame = rockTwo.layer.presentation()?.frame else { return }
 
         var explosionCenter: CGPoint?
-
+        
+        if mainFrame.maxY < enemyFrame.minY && !enemyPodPassed   { // Check if the obstacle has been passed
+            enemyPodPassed = true
+            score += 1
+            scoreLable.text = "Score: \(score)"
+            print("Score: \(score)")
+        }
+        if  mainFrame.maxY < rockOneFrame.minY && !rockOnePassed {
+            rockOnePassed = true
+            score += 1
+            scoreLable.text = "Score: \(score)"
+            print("Score: \(score)")
+        }
+        if  mainFrame.maxY < rockTwoFrame.minY && !rockTwoPassed {
+            rockTwoPassed = true
+            score += 1
+            scoreLable.text = "Score: \(score)"
+            print("Score: \(score)")
+        }
+        
+        
+        if enemyFrame.minY <= 0  {   // update flag
+            enemyPodPassed = false
+        }
+        if rockOneFrame.minY <= 0 {
+            rockOnePassed = false
+        }
+        if rockTwoFrame.minY <= 0 {
+            rockTwoPassed = false
+        }
+        
         if mainFrame.intersects(enemyFrame) {
             explosionCenter = CGPoint(x: (mainFrame.midX + enemyFrame.midX) / 2,
                                       y: (mainFrame.midY + enemyFrame.midY) / 2)
@@ -384,7 +433,6 @@ class GameViewController: UIViewController {
                                       y: (mainFrame.midY + rockTwoFrame.midY) / 2)
         }
         if let center = explosionCenter {
-          
             explosionAnimation(at: center)
             leftButton.isEnabled = false
             rightButton.isEnabled = false
@@ -416,6 +464,7 @@ class GameViewController: UIViewController {
             }
         }
     }
+    
     private func exitToMainMenu() {
         navigationController?.popToRootViewController(animated: true)
     }

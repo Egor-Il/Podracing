@@ -64,6 +64,7 @@ class LeaderboardViewController: UIViewController {
         table.backgroundColor = .clear
         table.allowsSelection = false
         table.showsVerticalScrollIndicator = false
+
     
        // table.separatorInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5) // - полоса разделения
         return table
@@ -179,6 +180,8 @@ extension LeaderboardViewController: UITableViewDelegate, UITableViewDataSource 
         
         //cell.fillRaceResuld(recordInfo: LeaderboardManager(raceRecord: "23424", playerName: "Egor", recordDate: "21.21.12"))
         cell.contentView.backgroundColor = .clear
+        cell.backgroundColor = .gray
+        
        // cell.backgroundColor = .clear // - фон ячейки
         return cell
     }
