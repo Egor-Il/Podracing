@@ -44,6 +44,7 @@ class ViewController: UIViewController {
     // MARK: - life cycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         configuratMenuUI()
         
     }

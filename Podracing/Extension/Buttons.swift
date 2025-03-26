@@ -17,6 +17,6 @@ final class Buttons {
     static let buttonsConteinerHeight: CGFloat = 150
     
     //MARK: - Back button
-    static let buttonOffSet: CGFloat = 50
+    static let buttonOffSet: CGFloat = 40
     static let buttonBackLable: String = "Back"
 }
