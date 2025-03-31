@@ -138,6 +138,9 @@ class SettingsViewController: UIViewController {
         return label
     }()
     
+    var sittingsContainerBottomConstraint: Constraint?
+    var sittingsContainerTopConstraint: Constraint?
+    
     private var currentPodIndex = 0
     private var currentBarrierIndex = 0
     private var currentPlayerName = "player"
@@ -154,11 +157,13 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configuratSettingUI()
+        
     }
+  
     // MARK: - UI configutarion
     private func configuratSettingUI() {
         // load()
-         //configuratNotifications()
+        configuratNotifications()
         view.addSubview(settingImageView)
         view.addSubview(backButton)
         view.addSubview(sittingsContainer)
@@ -201,19 +206,17 @@ class SettingsViewController: UIViewController {
         }
         
         sittingsContainer.snp.makeConstraints { make in
-            make.top.equalTo(backButton.snp.bottom)
+            
+            sittingsContainerBottomConstraint = make.bottom.equalToSuperview().inset(30).constraint
+            sittingsContainerTopConstraint = make.top.equalTo(backButton.snp.bottom).constraint
+//            make.top.equalTo(backButton.snp.bottom)
             make.left.equalToSuperview().offset(10)
             make.right.equalToSuperview().inset(10)
-            make.bottom.equalToSuperview().inset(30)
+//            make.bottom.equalToSuperview().inset(30)
         }
-        
-        let sittingContainerSize = view.frame.height * 0.9
-        let heightPodBarrier = sittingContainerSize * 0.6 / 2
-        let heightSlider = sittingContainerSize * 0.3 / 2
-        
         podSettingsContainer.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview()
-            make.height.equalTo(heightPodBarrier)
+            make.height.equalToSuperview().multipliedBy(0.3)
         }
         podChoiceleftButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
@@ -226,7 +229,7 @@ class SettingsViewController: UIViewController {
             make.width.height.equalTo(50)
         }
         podLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(5)
+            make.top.equalToSuperview().offset(10)
             make.left.equalTo(podChoiceleftButton.snp.right)
             make.right.equalTo(podChoiceRightButton.snp.left)
             make.height.equalTo(20)
@@ -241,7 +244,7 @@ class SettingsViewController: UIViewController {
         barrierSettingsContainer.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalTo(podSettingsContainer.snp.bottom)
-            make.height.equalTo(heightPodBarrier)
+            make.height.equalToSuperview().multipliedBy(0.3)
         }
         barrierChoiceleftButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
@@ -265,11 +268,24 @@ class SettingsViewController: UIViewController {
             make.right.equalTo(barrierChoiceRightButton.snp.left)
             make.bottom.equalToSuperview().inset(5)
         }
+        userNameContainer.snp.makeConstraints { make in
+            make.top.equalTo(barrierSettingsContainer.snp.bottom)
+            make.left.right.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(0.2)
+        }
+        userName.snp.makeConstraints { make in
+            make.centerY.equalToSuperview().multipliedBy(1.25)
+            make.left.equalToSuperview().offset(5)
+            make.right.equalToSuperview().inset(5)
+        }
+        userNameLabel.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.bottom.equalTo(userName.snp.top).offset(-5)
+        }
         sliderContainer.snp.makeConstraints { make in
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
+            make.left.right.equalToSuperview()
+            make.top.equalTo(userNameContainer.snp.bottom)
             make.bottom.equalToSuperview()
-            make.height.equalTo(heightSlider)
         }
         difficultySlider.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(20)
@@ -284,21 +300,6 @@ class SettingsViewController: UIViewController {
             make.left.right.equalToSuperview()
             make.bottom.equalTo(difficultySlider.snp.top).offset(-5)
         }
-        userNameContainer.snp.makeConstraints { make in
-            make.top.equalTo(barrierSettingsContainer.snp.bottom)
-            make.bottom.equalTo(sliderContainer.snp.top)
-            make.left.right.equalToSuperview()
-        }
-        userName.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.left.equalToSuperview().offset(5)
-            make.right.equalToSuperview().inset(5)
-        }
-        userNameLabel.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.bottom.equalTo(userName.snp.top).offset(-5)
-        }
-        
         // MARK: - Buttons setup
         let firstPodImage = PodImages.shared?.podArray[currentPodIndex] // - ??????
         podImage.image = firstPodImage
@@ -331,6 +332,7 @@ class SettingsViewController: UIViewController {
         navigationController?.popViewController(animated: true)
        // save()
     }
+    
     private func podChoice(to direction: podLookChoice) {
         guard let podImages = PodImages.shared?.podArray else { return }
         switch direction {
@@ -352,29 +354,29 @@ class SettingsViewController: UIViewController {
         }
         barrierImage.image = barrierImages[currentBarrierIndex]
     }
-    private func save() {
-        
-       /* let savedPod = PodImages.shared?.podArray[currentPodIndex]*/ // не помню зачем
-//        print(savedPod as Any)
-        UserDefaults.standard.setValue(currentPodIndex, forKey: SettingsKeys.pod)
-        UserDefaults.standard.setValue(currentBarrierIndex, forKey: SettingsKeys.barrier)
-        UserDefaults.standard.setValue(currentPlayerName, forKey: SettingsKeys.playerName)
-        print("end save")
-        // - сохранять одной строчкой?
-        
-        print(
-            UserDefaults.standard.value(forKey: SettingsKeys.pod)!,
-            UserDefaults.standard.value(forKey: SettingsKeys.barrier)!,
-            UserDefaults.standard.value(forKey: SettingsKeys.playerName)!
-        )
-    }
-    private func load() {
-        
-        UserDefaults.standard.setValue(currentPodIndex, forKey: SettingsKeys.pod)
-        UserDefaults.standard.setValue(currentBarrierIndex, forKey: SettingsKeys.barrier)
-        UserDefaults.standard.setValue(currentPlayerName, forKey: SettingsKeys.playerName)
-        print("end load")
-    }
+//    private func save() {
+//        
+//       /* let savedPod = PodImages.shared?.podArray[currentPodIndex]*/ // не помню зачем
+////        print(savedPod as Any)
+//        UserDefaults.standard.setValue(currentPodIndex, forKey: SettingsKeys.pod)
+//        UserDefaults.standard.setValue(currentBarrierIndex, forKey: SettingsKeys.barrier)
+//        UserDefaults.standard.setValue(currentPlayerName, forKey: SettingsKeys.playerName)
+//        print("end save")
+//        // - сохранять одной строчкой?
+//        
+//        print(
+//            UserDefaults.standard.value(forKey: SettingsKeys.pod)!,
+//            UserDefaults.standard.value(forKey: SettingsKeys.barrier)!,
+//            UserDefaults.standard.value(forKey: SettingsKeys.playerName)!
+//        )
+//    }
+//    private func load() {
+//        
+//        UserDefaults.standard.setValue(currentPodIndex, forKey: SettingsKeys.pod)
+//        UserDefaults.standard.setValue(currentBarrierIndex, forKey: SettingsKeys.barrier)
+//        UserDefaults.standard.setValue(currentPlayerName, forKey: SettingsKeys.playerName)
+//        print("end load")
+//    }
     
     private func configuratNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -382,11 +384,29 @@ class SettingsViewController: UIViewController {
     }
     @objc private func keyboardWillShow(_ notification: Notification) {
         guard let info = notification.userInfo,
-              let duration = (info[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue else { return }
-              /*let keyboardFrame = (info[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue*/
-        sittingsContainer.snp.updateConstraints { make in
-            make.top.equalToSuperview()
+              let duration = (info[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue,
+              let keyboardFrame = (info[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+        
+        let keyboardHeight = keyboardFrame.height
+        let userNameMaxY = userName.convert(userName.bounds, to: view).maxY
+        let screenHeight = view.frame.height
+        let avilableSpace = screenHeight - keyboardHeight
+        
+        if userNameMaxY > avilableSpace {
+            let shift = userNameMaxY - keyboardFrame.minY + 5
+            
+            sittingsContainerTopConstraint?.update(inset: shift)
+            sittingsContainerBottomConstraint?.update(inset: shift)
+//            sittingsContainer.snp.updateConstraints { make in
+//                make.top.equalTo(backButton.snp.bottom).inset(shift)
+//                make.bottom.equalToSuperview().inset(30 + shift)
+//            }
         }
+//        sittingsContainer.snp.updateConstraints { make in
+//            make.top.equalTo(backButton.snp.bottom).inset(newNew + userName.frame.height) // 130
+//            make.bottom.equalToSuperview().inset( newP + 30)
+//        }
+        
         UIView.animate(withDuration: duration) {
             self.view.layoutIfNeeded()
             self.backButton.isHidden = true
@@ -397,11 +417,13 @@ class SettingsViewController: UIViewController {
               let duration = (info[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue else { return }
         sittingsContainer.snp.updateConstraints { make in
             make.top.equalTo(backButton.snp.bottom).offset(10)
+            make.bottom.equalToSuperview().inset(30)
         }
         UIView.animate(withDuration: duration) {
-            self.view.layoutIfNeeded()
-            self.backButton.isHidden = false
+             self.view.layoutIfNeeded()
+             self.backButton.isHidden = false
         }
+    
     }
     @objc func hideKeyboard() {
         userName.resignFirstResponder()
