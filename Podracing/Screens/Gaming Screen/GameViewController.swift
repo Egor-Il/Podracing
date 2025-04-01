@@ -200,7 +200,7 @@ final class GameViewController: UIViewController {
         }
         scoreLable.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(Buttons.buttonOffSet)
-            make.right.equalToSuperview().inset(Buttons.buttonOffSet)
+            make.right.equalToSuperview().inset(60)
         }
         leftButton.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(Constraint.movementButtonOffSetSides)
