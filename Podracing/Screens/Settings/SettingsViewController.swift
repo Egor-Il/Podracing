@@ -138,12 +138,9 @@ class SettingsViewController: UIViewController {
         return label
     }()
     
-    var sittingsContainerBottomConstraint: Constraint?
-    var sittingsContainerTopConstraint: Constraint?
-    
     private var currentPodIndex = 0
     private var currentBarrierIndex = 0
-    private var currentPlayerName = "player"
+    private var currentPlayerName = "Player"
     
     enum podLookChoice{
         case left
@@ -159,7 +156,7 @@ class SettingsViewController: UIViewController {
         configuratSettingUI()
         
     }
-  
+    
     // MARK: - UI configutarion
     private func configuratSettingUI() {
         // load()
@@ -206,13 +203,10 @@ class SettingsViewController: UIViewController {
         }
         
         sittingsContainer.snp.makeConstraints { make in
-            
-            sittingsContainerBottomConstraint = make.bottom.equalToSuperview().inset(30).constraint
-            sittingsContainerTopConstraint = make.top.equalTo(backButton.snp.bottom).constraint
-//            make.top.equalTo(backButton.snp.bottom)
+            make.top.equalTo(backButton.snp.bottom)
+            make.bottom.equalToSuperview().inset(30)
             make.left.equalToSuperview().offset(10)
             make.right.equalToSuperview().inset(10)
-//            make.bottom.equalToSuperview().inset(30)
         }
         podSettingsContainer.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview()
@@ -330,7 +324,7 @@ class SettingsViewController: UIViewController {
     
     private func backPressed() {
         navigationController?.popViewController(animated: true)
-       // save()
+        // save()
     }
     
     private func podChoice(to direction: podLookChoice) {
@@ -354,29 +348,29 @@ class SettingsViewController: UIViewController {
         }
         barrierImage.image = barrierImages[currentBarrierIndex]
     }
-//    private func save() {
-//        
-//       /* let savedPod = PodImages.shared?.podArray[currentPodIndex]*/ // не помню зачем
-////        print(savedPod as Any)
-//        UserDefaults.standard.setValue(currentPodIndex, forKey: SettingsKeys.pod)
-//        UserDefaults.standard.setValue(currentBarrierIndex, forKey: SettingsKeys.barrier)
-//        UserDefaults.standard.setValue(currentPlayerName, forKey: SettingsKeys.playerName)
-//        print("end save")
-//        // - сохранять одной строчкой?
-//        
-//        print(
-//            UserDefaults.standard.value(forKey: SettingsKeys.pod)!,
-//            UserDefaults.standard.value(forKey: SettingsKeys.barrier)!,
-//            UserDefaults.standard.value(forKey: SettingsKeys.playerName)!
-//        )
-//    }
-//    private func load() {
-//        
-//        UserDefaults.standard.setValue(currentPodIndex, forKey: SettingsKeys.pod)
-//        UserDefaults.standard.setValue(currentBarrierIndex, forKey: SettingsKeys.barrier)
-//        UserDefaults.standard.setValue(currentPlayerName, forKey: SettingsKeys.playerName)
-//        print("end load")
-//    }
+    //    private func save() {
+    //
+    //       /* let savedPod = PodImages.shared?.podArray[currentPodIndex]*/ // не помню зачем
+    ////        print(savedPod as Any)
+    //        UserDefaults.standard.setValue(currentPodIndex, forKey: SettingsKeys.pod)
+    //        UserDefaults.standard.setValue(currentBarrierIndex, forKey: SettingsKeys.barrier)
+    //        UserDefaults.standard.setValue(currentPlayerName, forKey: SettingsKeys.playerName)
+    //        print("end save")
+    //        // - сохранять одной строчкой?
+    //
+    //        print(
+    //            UserDefaults.standard.value(forKey: SettingsKeys.pod)!,
+    //            UserDefaults.standard.value(forKey: SettingsKeys.barrier)!,
+    //            UserDefaults.standard.value(forKey: SettingsKeys.playerName)!
+    //        )
+    //    }
+    //    private func load() {
+    //
+    //        UserDefaults.standard.setValue(currentPodIndex, forKey: SettingsKeys.pod)
+    //        UserDefaults.standard.setValue(currentBarrierIndex, forKey: SettingsKeys.barrier)
+    //        UserDefaults.standard.setValue(currentPlayerName, forKey: SettingsKeys.playerName)
+    //        print("end load")
+    //    }
     
     private func configuratNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -395,23 +389,17 @@ class SettingsViewController: UIViewController {
         if userNameMaxY > avilableSpace {
             let shift = userNameMaxY - keyboardFrame.minY + 5
             
-            sittingsContainerTopConstraint?.update(inset: shift)
-            sittingsContainerBottomConstraint?.update(inset: shift)
-//            sittingsContainer.snp.updateConstraints { make in
-//                make.top.equalTo(backButton.snp.bottom).inset(shift)
-//                make.bottom.equalToSuperview().inset(30 + shift)
-//            }
+            sittingsContainer.snp.updateConstraints { make in
+                make.top.equalTo(backButton.snp.bottom).inset(shift)
+                make.bottom.equalToSuperview().inset(30 + shift)
+            }
         }
-//        sittingsContainer.snp.updateConstraints { make in
-//            make.top.equalTo(backButton.snp.bottom).inset(newNew + userName.frame.height) // 130
-//            make.bottom.equalToSuperview().inset( newP + 30)
-//        }
-        
         UIView.animate(withDuration: duration) {
             self.view.layoutIfNeeded()
             self.backButton.isHidden = true
         }
     }
+    
     @objc private func keyboardWillHide(_ notification: Notification) {
         guard let info = notification.userInfo,
               let duration = (info[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue else { return }
@@ -420,10 +408,10 @@ class SettingsViewController: UIViewController {
             make.bottom.equalToSuperview().inset(30)
         }
         UIView.animate(withDuration: duration) {
-             self.view.layoutIfNeeded()
-             self.backButton.isHidden = false
+            self.view.layoutIfNeeded()
+            self.backButton.isHidden = false
         }
-    
+        
     }
     @objc func hideKeyboard() {
         userName.resignFirstResponder()
