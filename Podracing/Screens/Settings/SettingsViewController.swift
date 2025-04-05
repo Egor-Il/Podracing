@@ -49,15 +49,15 @@ class SettingsViewController: UIViewController {
         button.setImage(rightChoice, for: .normal)
         return button
     }()
-    private var podImage: UIImageView = {
+    private var mainPodImage: UIImageView = {
         let view = UIImageView()
-        // let startingPod = UIImage(named: "mainPod")
+        view.image = UIImage(named: Images.mainPod)
         view.contentMode = .scaleAspectFit
         return view
     }()
     private let podLabel: UILabel = {
         let label = UILabel()
-        label.text = "selected pod"
+        label.text = "selected pod" // do I need to move it to extension?
         label.textAlignment = .center
         label.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
         return label
@@ -83,7 +83,7 @@ class SettingsViewController: UIViewController {
     }()
     private let barrierLabel: UILabel = {
         let label = UILabel()
-        label.text = "selected barrier"
+        label.text = "selected barrier" // do I need to move it to extension?
         label.textAlignment = .center
         label.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
         return label
@@ -95,7 +95,7 @@ class SettingsViewController: UIViewController {
     lazy var userName: UITextField = {
         let textField = UITextField()
         textField.textAlignment = .center
-        textField.placeholder = "Player"
+        textField.placeholder = "Player"  // do I need to move it to extension?
         textField.delegate = self
         textField.backgroundColor = .lightGray
         textField.borderStyle = .roundedRect
@@ -103,7 +103,7 @@ class SettingsViewController: UIViewController {
     }()
     private let userNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "player name"
+        label.text = "player name" // do I need to move it to extension?
         label.textAlignment = .center
         label.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
         return label
@@ -125,14 +125,14 @@ class SettingsViewController: UIViewController {
     }()
     private let difficultyLevelLabel: UILabel = {
         let label = UILabel()
-        label.text = "Difficulty Level"
+        label.text = "Difficulty Level"  // do I need to move it to extension?
         label.textAlignment = .center
         label.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
         return label
     }()
     private let sliderDifficultyLabel: UILabel = {
         let label = UILabel()
-        label.text = "medium"
+        label.text = "medium"   // do I need to move it to extension?
         label.textAlignment = .center
         label.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
         return label
@@ -140,68 +140,91 @@ class SettingsViewController: UIViewController {
     
     private var currentPodIndex = 0
     private var currentBarrierIndex = 0
-    private var currentPlayerName = "Player"
     
-    enum podLookChoice{
+    private var chosenPlayerName = "Player"
+    private var chosenMainPod: String = ""
+    private var chosenBarrier: String = ""
+    private var chosenDifficult: String = ""
+    private var chosenDifficultValue: Float = 1
+    
+    enum podImageChoice{
         case left
         case right
     }
-    enum barrierLookChoice{
+    enum barrierImageChoice{
         case left
         case right
     }
     // MARK: - life cycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        configuratSettingUI()
+        preLoadSavedSettings()
+        configureSettingsUI()
         
     }
     
     // MARK: - UI configutarion
-    private func configuratSettingUI() {
-        // load()
+    private func configureSettingsUI() {
+        
         configuratNotifications()
         view.addSubview(settingImageView)
         view.addSubview(backButton)
         view.addSubview(sittingsContainer)
-        
         sittingsContainer.addSubview(podSettingsContainer)
-        
         podSettingsContainer.addSubview(podChoiceleftButton)
         podSettingsContainer.addSubview(podChoiceRightButton)
-        podSettingsContainer.addSubview(podImage)
+        podSettingsContainer.addSubview(mainPodImage)
         podSettingsContainer.addSubview(podLabel)
-        
         sittingsContainer.addSubview(barrierSettingsContainer)
-        
         barrierSettingsContainer.addSubview(barrierChoiceleftButton)
         barrierSettingsContainer.addSubview(barrierChoiceRightButton)
         barrierSettingsContainer.addSubview(barrierImage)
         barrierSettingsContainer.addSubview(barrierLabel)
-        
         sittingsContainer.addSubview(userNameContainer)
         userNameContainer.addSubview(userName)
         userNameContainer.addSubview(userNameLabel)
-        
         sittingsContainer.addSubview(sliderContainer)
-        
         sliderContainer.addSubview(difficultyLevelLabel)
         sliderContainer.addSubview(difficultySlider)
         sliderContainer.addSubview(sliderDifficultyLabel)
         
-        
+        setupConstraints()
         
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         view.addGestureRecognizer(recognizer)
+        // MARK: - Buttons setup
         
-        // MARK: - Setting view constraints
+        let backPressed = UIAction { _ in
+            self.backPressed()
+        }
+        let podLeftChoise = UIAction { _ in
+            self.podChoice(to: .left)
+        }
+        let podRightChoise = UIAction { _ in
+            self.podChoice(to: .right)
+        }
+        let barrierLeftChoise = UIAction { _ in
+            self.barrierChoice(to: .left)
+        }
+        let barrierRightChoise = UIAction { _ in
+            self.barrierChoice(to: .right)
+        }
+        backButton.addAction(backPressed, for: .touchUpInside)
+        podChoiceleftButton.addAction(podLeftChoise, for: .touchUpInside)
+        podChoiceRightButton.addAction(podRightChoise, for: .touchUpInside)
+        barrierChoiceleftButton.addAction(barrierLeftChoise, for: .touchUpInside)
+        barrierChoiceRightButton.addAction(barrierRightChoise, for: .touchUpInside)
+        difficultySlider.addTarget(self, action: #selector(difficultyChanged(_ : )), for: .valueChanged)
+        reloadSettings()
+    }
+    // MARK: - Functions
+    private func setupConstraints() {
         settingImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         backButton.snp.makeConstraints { make in
             make.left.top.equalToSuperview().offset(Buttons.buttonOffSet)
         }
-        
         sittingsContainer.snp.makeConstraints { make in
             make.top.equalTo(backButton.snp.bottom)
             make.bottom.equalToSuperview().inset(30)
@@ -228,13 +251,12 @@ class SettingsViewController: UIViewController {
             make.right.equalTo(podChoiceRightButton.snp.left)
             make.height.equalTo(20)
         }
-        podImage.snp.makeConstraints { make in
+        mainPodImage.snp.makeConstraints { make in
             make.top.equalTo(podLabel.snp.bottom).offset(5)
             make.left.equalTo(podChoiceleftButton.snp.right)
             make.right.equalTo(podChoiceRightButton.snp.left)
             make.bottom.equalToSuperview().inset(5)
         }
-        
         barrierSettingsContainer.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalTo(podSettingsContainer.snp.bottom)
@@ -294,83 +316,55 @@ class SettingsViewController: UIViewController {
             make.left.right.equalToSuperview()
             make.bottom.equalTo(difficultySlider.snp.top).offset(-5)
         }
-        // MARK: - Buttons setup
-        let firstPodImage = PodImages.shared?.podArray[currentPodIndex] // - ??????
-        podImage.image = firstPodImage
-        
-        let backPressed = UIAction { _ in
-            self.backPressed()
-        }
-        let podLeftChoise = UIAction { _ in
-            self.podChoice(to: .left)
-        }
-        let podRightChoise = UIAction { _ in
-            self.podChoice(to: .right)
-        }
-        let barrierLeftChoise = UIAction { _ in
-            self.barrierChoice(to: .left)
-        }
-        let barrierRightChoise = UIAction { _ in
-            self.barrierChoice(to: .right)
-        }
-        backButton.addAction(backPressed, for: .touchUpInside)
-        podChoiceleftButton.addAction(podLeftChoise, for: .touchUpInside)
-        podChoiceRightButton.addAction(podRightChoise, for: .touchUpInside)
-        barrierChoiceleftButton.addAction(barrierLeftChoise, for: .touchUpInside)
-        barrierChoiceRightButton.addAction(barrierRightChoise, for: .touchUpInside)
-        difficultySlider.addTarget(self, action: #selector(difficultyChanged(_ : )), for: .valueChanged)
     }
-    // MARK: - Functions
     
+    private func reloadSettings() {
+        guard let savedSettings = UserDefaults.standard.value(SavedSettins.self, forKey: SettingsKeys.playerSettings) else { return }
+        mainPodImage.image = UIImage(named: savedSettings.selectedPod)
+        barrierImage.image = UIImage(named: savedSettings.barrierName)
+        userName.text = savedSettings.playerName
+        sliderDifficultyLabel.text = savedSettings.difficultyLevel
+        difficultySlider.value = chosenDifficultValue
+    }
+    private func preLoadSavedSettings() {
+        if let saved = UserDefaults.standard.value(SavedSettins.self, forKey: SettingsKeys.playerSettings) {
+            chosenPlayerName = saved.playerName
+            chosenMainPod = saved.selectedPod
+            chosenBarrier = saved.barrierName
+            chosenDifficult = saved.difficultyLevel
+            chosenDifficultValue = saved.difficultyLevelValue
+        }
+    }
     private func backPressed() {
         navigationController?.popViewController(animated: true)
+        saveSettings()
         // save()
     }
     
-    private func podChoice(to direction: podLookChoice) {
-        guard let podImages = PodImages.shared?.podArray else { return }
+    private func podChoice(to direction: podImageChoice) {
+        let podImages = PodImages.shared.podArray
         switch direction {
-        case .left:  // - переделать нормальный енам
+        case .left:
             currentPodIndex = (currentPodIndex - 1 + podImages.count) % podImages.count
             
         case .right:
             currentPodIndex = (currentPodIndex + 1) % podImages.count
         }
-        podImage.image = podImages[currentPodIndex]
+        mainPodImage.image = podImages[currentPodIndex].image
+        chosenMainPod = podImages[currentPodIndex].name
     }
-    private func barrierChoice(to direction:barrierLookChoice) {
-        guard let barrierImages = BarrierImages.shared?.barrierArray else { return }
+    
+    private func barrierChoice(to direction:barrierImageChoice) {
+        let barrierImages = BarrierImages.shared.barrierArray
         switch direction {
         case .left:
             currentBarrierIndex = (currentBarrierIndex - 1 + barrierImages.count) % barrierImages.count
         case .right:
             currentBarrierIndex = (currentBarrierIndex + 1 + barrierImages.count) % barrierImages.count
         }
-        barrierImage.image = barrierImages[currentBarrierIndex]
+        barrierImage.image = barrierImages[currentBarrierIndex].image
+        chosenBarrier = barrierImages[currentBarrierIndex].name
     }
-    //    private func save() {
-    //
-    //       /* let savedPod = PodImages.shared?.podArray[currentPodIndex]*/ // не помню зачем
-    ////        print(savedPod as Any)
-    //        UserDefaults.standard.setValue(currentPodIndex, forKey: SettingsKeys.pod)
-    //        UserDefaults.standard.setValue(currentBarrierIndex, forKey: SettingsKeys.barrier)
-    //        UserDefaults.standard.setValue(currentPlayerName, forKey: SettingsKeys.playerName)
-    //        print("end save")
-    //        // - сохранять одной строчкой?
-    //
-    //        print(
-    //            UserDefaults.standard.value(forKey: SettingsKeys.pod)!,
-    //            UserDefaults.standard.value(forKey: SettingsKeys.barrier)!,
-    //            UserDefaults.standard.value(forKey: SettingsKeys.playerName)!
-    //        )
-    //    }
-    //    private func load() {
-    //
-    //        UserDefaults.standard.setValue(currentPodIndex, forKey: SettingsKeys.pod)
-    //        UserDefaults.standard.setValue(currentBarrierIndex, forKey: SettingsKeys.barrier)
-    //        UserDefaults.standard.setValue(currentPlayerName, forKey: SettingsKeys.playerName)
-    //        print("end load")
-    //    }
     
     private func configuratNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -427,6 +421,21 @@ class SettingsViewController: UIViewController {
         } else if roundedValue == 2 {
             sliderDifficultyLabel.text = "hard"
         }
+        if let text = sliderDifficultyLabel.text {
+            chosenDifficult = text
+        }
+        chosenDifficultValue = roundedValue
+    }
+    
+    private func saveSettings () {
+        
+        let savedPlayerSettings = SavedSettins(selectedPod: chosenMainPod,
+                                               barrierName: chosenBarrier,
+                                               playerName: chosenPlayerName,
+                                               difficultyLevel: chosenDifficult,
+                                               difficultyLevelValue: chosenDifficultValue
+        )
+        UserDefaults.standard.set(encodable: savedPlayerSettings, forKey: SettingsKeys.playerSettings)
     }
     
 }
@@ -436,7 +445,7 @@ extension SettingsViewController: UITextFieldDelegate {
         let name = userName.text ?? ""
         guard let stringRange = Range(range, in: name) else { return false }
         let newName = name.replacingCharacters(in: stringRange, with: string)
-        currentPlayerName = newName
+        chosenPlayerName = newName
         return true
     }
     
