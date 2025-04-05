@@ -1,17 +1,17 @@
 //
-//  ViewController.swift
+//  MenuViewController.swift
 //  Podracing
 //
-//  Created by Egor Ilchenko on 4/14/24.
+//  Created by Egor Ilchenko on 4/3/25.
 //
 
 import UIKit
 import SnapKit
 
-class ViewController: UIViewController {
+class MenuViewController: UIViewController {
     // MARK: - Property
     
-    private let menuScreen = UIImageView() 
+    private let menuScreen = UIImageView()
     private let gameNameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: Font.fontName, size: Font.gameLabelFont )
@@ -41,26 +41,45 @@ class ViewController: UIViewController {
         button.titleLabel?.font = UIFont(name: Font.fontName, size: Font.buttonFont)
         return button
     }()
-    // MARK: - life cycle functions
+    private let createButton: (String) -> UIButton = { buttonTitle in
+        let button = UIButton(type: .system)
+        button.setTitle(buttonTitle, for: .normal)
+        button.setTitleColor(.green, for: .normal)
+        button.titleLabel?.font = UIFont(name: Font.fontName, size: Font.buttonFont)
+        return button
+    }
+    // MARK: - Life cycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        configuratMenuUI()
-        
+        configureMenuUI()
     }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    private func configuratMenuUI() {
+    
+    private func configureMenuUI() {
         view.addSubview(menuScreen)
         view.addSubview(gameNameLabel)
         buttonsConteiner.addSubview(playButton)
         buttonsConteiner.addSubview(boardButton)
         buttonsConteiner.addSubview(settingButton)
         view.addSubview(buttonsConteiner)
-        
+        setupConstraints()
         let menuImage = UIImage(named: Images.menu)
         menuScreen.image = menuImage
+        
+        let playButtonAction = UIAction { _ in
+            self.playPressed()
+        }
+        let settingsButtonAction = UIAction { _ in
+            self.settingsPressed()
+        }
+        let leaderboardButtonAction = UIAction { _ in
+            self.leaderboardPressed()
+        }
+        playButton.addAction(playButtonAction, for: .touchUpInside)
+        settingButton.addAction(settingsButtonAction, for: .touchUpInside)
+        boardButton.addAction(leaderboardButtonAction, for: .touchUpInside)
+    }
+    // MARK: - Actions
+    private func setupConstraints() {
         menuScreen.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -85,18 +104,6 @@ class ViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.top.equalTo(boardButton.snp.bottom)
         }
-        let actionPlay = UIAction { _ in
-            self.playPressed()
-        }
-        let actionSettings = UIAction { _ in
-            self.settingsPressed()
-        }
-        let actionLeaderboard = UIAction { _ in
-            self.leaderboardPressed()
-        }
-        playButton.addAction(actionPlay, for: .touchUpInside)
-        settingButton.addAction(actionSettings, for: .touchUpInside)
-        boardButton.addAction(actionLeaderboard, for: .touchUpInside)
     }
     private func playPressed() {
         let controller = GameViewController()
@@ -111,4 +118,3 @@ class ViewController: UIViewController {
         navigationController?.pushViewController(controller, animated: true)
     }
 }
-

@@ -1,0 +1,27 @@
+//
+//  SavedSettins.swift
+//  Podracing
+//
+//  Created by Egor Ilchenko on 4/4/25.
+//
+
+import Foundation
+
+final class SavedSettins: Codable {
+    
+    let selectedPod: String
+    let barrierName: String
+    let playerName: String
+    let difficultyLevel: String
+    let difficultyLevelValue: Float
+    
+    init(selectedPod: String, barrierName: String, playerName: String, difficultyLevel: String, difficultyLevelValue: Float) {
+        self.selectedPod = selectedPod
+        self.barrierName = barrierName
+        self.playerName = playerName
+        self.difficultyLevel = difficultyLevel
+        self.difficultyLevelValue = difficultyLevelValue
+        
+    }
+    
+}

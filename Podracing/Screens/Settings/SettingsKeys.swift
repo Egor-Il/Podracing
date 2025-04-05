@@ -11,6 +11,6 @@ enum SettingsKeys {
     
     static let pod = "pod"
     static let barrier = "barrier"
-    static let playerName = "name"
+    static let playerSettings = "player"
     
 }
