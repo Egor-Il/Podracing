@@ -141,11 +141,11 @@ class SettingsViewController: UIViewController {
     private var currentPodIndex = 0
     private var currentBarrierIndex = 0
     
-    private var chosenPlayerName = "Player"
-    private var chosenMainPod: String = ""
-    private var chosenBarrier: String = ""
-    private var chosenDifficult: String = ""
-    private var chosenDifficultValue: Float = 1
+    private var chosenPlayerName: String? /*= "Player"*/
+    private var chosenMainPod: String? /*= ""*/
+    private var chosenBarrier: String? /*= ""*/
+    private var chosenDifficult: String? /*= ""*/
+    private var chosenDifficultValue: Float? /*= 1*/
     
     enum podImageChoice{
         case left
@@ -434,7 +434,7 @@ class SettingsViewController: UIViewController {
                                                playerName: chosenPlayerName,
                                                difficultyLevel: chosenDifficult,
                                                difficultyLevelValue: chosenDifficultValue
-        )
+       )
         UserDefaults.standard.set(encodable: savedPlayerSettings, forKey: SettingsKeys.playerSettings)
     }
     
