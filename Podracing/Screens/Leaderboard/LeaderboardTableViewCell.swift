@@ -14,6 +14,7 @@ class LeaderboardTableViewCell: UITableViewCell {
     private let record: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Starjedi", size: 15)
+        label.textAlignment = .center
         return label
     }()
     private let playerName: UILabel = {
@@ -24,6 +25,7 @@ class LeaderboardTableViewCell: UITableViewCell {
     }()
     private let recordDate: UILabel = {
         let label = UILabel()
+        label.textAlignment = .center
         label.font = UIFont(name: "Starjedi", size: 15)
         return label
     }()
@@ -31,36 +33,39 @@ class LeaderboardTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        contentView.addSubview(record)
+        
         contentView.addSubview(playerName)
+        contentView.addSubview(record)
         contentView.addSubview(recordDate)
         
-        record.snp.makeConstraints { make in
+        playerName.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(5)
-            make.width.equalTo(50)
+            make.width.equalToSuperview().dividedBy(3)
             make.centerY.equalToSuperview()
-            make.centerX.equalToSuperview()
+//            make.centerX.equalToSuperview()
+        }
+        record.snp.makeConstraints { make in
+            make.left.equalTo(playerName.snp.right)
+            make.width.equalToSuperview().dividedBy(3)
+            make.centerY.equalToSuperview()
+//            make.centerX.equalToSuperview()
         }
         recordDate.snp.makeConstraints { make in
-            make.right.equalToSuperview()
-            make.width.equalTo(70)
-            make.centerY.equalToSuperview()
-            make.centerX.equalToSuperview()
-        }
-        playerName.snp.makeConstraints { make in
             make.left.equalTo(record.snp.right)
-            make.right.equalTo(recordDate.snp.left)
+            make.right.equalToSuperview()
             make.centerY.equalToSuperview()
-            make.centerX.equalToSuperview()
+//            make.centerX.equalToSuperview()
         }
+        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    func fillRaceResuld(){
-        record.text = LeaderboardManager.shared.getRecord().first?.record
-        playerName.text = LeaderboardManager.shared.getRecord().first?.player
-        recordDate.text = LeaderboardManager.shared.getRecord().first?.date
+    
+    func configure(with entry: LeaderboardEntry) {
+        record.text = String(entry.record)
+        playerName.text = entry.player
+        recordDate.text = entry.date
     }
 }

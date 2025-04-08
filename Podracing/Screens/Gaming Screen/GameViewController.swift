@@ -263,7 +263,7 @@ final class GameViewController: UIViewController {
     func recordTime() -> String {
         let savedDate = Date()
         let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM d, yyyy"
+        formatter.dateFormat = "dd.MM.yy"
         let savedRaceDate = formatter.string(from: savedDate)
         return savedRaceDate
     }
@@ -376,7 +376,7 @@ final class GameViewController: UIViewController {
         present(alert,animated: true)
         
         
-         LeaderboardManager.shared.addRecord(record: String(score), playerName: playerName, date: recordTime())
+        LeaderboardManager.shared.addRecord(record: score, playerName: playerName, date: recordTime())
         
         print()
         

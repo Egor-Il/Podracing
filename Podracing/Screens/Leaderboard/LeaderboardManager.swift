@@ -8,7 +8,7 @@
 import Foundation
 
 struct LeaderboardEntry: Codable {
-    let record: String
+    let record: Int
     let player: String
     let date: String
 }
@@ -17,19 +17,23 @@ struct LeaderboardEntry: Codable {
 final class LeaderboardManager {
     
     static let shared = LeaderboardManager()
-    
     private var leaderboardEntries: [LeaderboardEntry] = []
-    
     private let userDefaultsKey = "LeaderboardEntries"
     
     private init() {
         loadFromStorage()
     }
     
-    func addRecord(record: String, playerName: String, date: String) {
-        let entry = LeaderboardEntry(record: record, player: playerName, date: date)
-        leaderboardEntries.append(entry)
-        saveToStorage()
+    func addRecord(record: Int, playerName: String, date: String) {
+        let entryResult = LeaderboardEntry(record: record, player: playerName, date: date)
+        let recordExist = leaderboardEntries.contains { $0.record == entryResult.record }
+        if recordExist || entryResult.record == 0 {
+            return
+        } else {
+            leaderboardEntries.append(entryResult)
+            leaderboardEntries.sort { $0.record > $1.record }
+            saveToStorage()
+        }
     }
     
     func clearRecord() {
