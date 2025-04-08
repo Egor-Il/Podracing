@@ -58,10 +58,9 @@ class LeaderboardTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    func fillRaceResuld(recordInfo:LeaderboardManager){
-        record.text = recordInfo.raceRecord
-        playerName.text = recordInfo.playerName
-        recordDate.text = recordInfo.recordDate
-        
+    func fillRaceResuld(){
+        record.text = LeaderboardManager.shared.getRecord().first?.record
+        playerName.text = LeaderboardManager.shared.getRecord().first?.player
+        recordDate.text = LeaderboardManager.shared.getRecord().first?.date
     }
 }

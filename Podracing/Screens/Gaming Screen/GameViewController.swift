@@ -79,10 +79,18 @@ final class GameViewController: UIViewController {
     }()
     private var track: UIImageView = {
         var trackField = UIImageView()
-        let track = UIImage(named: Images.track)
+        let track = UIImage(named: "trackVersionTwo")
         trackField.image = track
         return trackField
     }()
+    
+//    private var trackSecond: UIImageView = {
+//        var trackField = UIImageView()
+//        let track = UIImage(named: "trackVersionTwo")
+//        trackField.image = track
+//        return trackField
+//    }()
+    
     private var leftCurb: UIImageView = {
         var leftSide = UIImageView()
         let leftSideImage = UIImage(named: Images.leftCurb)
@@ -145,17 +153,15 @@ final class GameViewController: UIViewController {
     
     //    var chosenPod: Any = ""
     //    var chosenName: Any = ""
-    //    var chosenBarrier: Any = ""
+    private var playerName:String = ""
     
     // MARK: - life cycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        //  loadSettings()
         configurationGameUI()
     }
     // MARK: - UI configutarion
     private func configurationGameUI() {
-        // loadSettings()
         view.addSubview(track)
         view.addSubview(leftCurb)
         view.addSubview(rightCurb)
@@ -168,7 +174,6 @@ final class GameViewController: UIViewController {
         view.addSubview(backButton)
         view.addSubview(scoreLable)
         setupConstraints()
-        
         leftButton.layer.cornerRadius = CGFloat(Constraint.movementButtonSize / 2)
         leftButton.clipsToBounds = true
         rightButton.layer.cornerRadius = CGFloat(Constraint.movementButtonSize / 2)
@@ -201,6 +206,7 @@ final class GameViewController: UIViewController {
         leftButton.addAction(leftActionPressed, for: .touchUpInside)
         rightButton.addAction(rightActionPressed, for: .touchUpInside)
         backButton.addAction(backActionPressed, for: .touchUpInside)
+        reloadSettings()
     }
     // MARK: - Action func
     private func setupConstraints() {
@@ -244,8 +250,24 @@ final class GameViewController: UIViewController {
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(alert, animated: true)
-        //   recordTime()
     }
+    
+    private func reloadSettings() {
+        guard let savedSettings = UserDefaults.standard.value(SavedSettins.self, forKey: SettingsKeys.playerSettings) else { return }
+        mainPod.image = UIImage(named: savedSettings.selectedPod)
+//        barrierImage.image = UIImage(named: savedSettings.barrierName)
+          playerName = savedSettings.playerName
+//        difficultySlider.value = chosenDifficultValue ?? 1
+    }
+    
+    func recordTime() -> String {
+        let savedDate = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM d, yyyy"
+        let savedRaceDate = formatter.string(from: savedDate)
+        return savedRaceDate
+    }
+    
     private func startTimerForObstacles() {
         timerForEnemyPod = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { [weak self] _ in
             self?.enemyPodAnimation ()
@@ -300,7 +322,6 @@ final class GameViewController: UIViewController {
             self.enemyPod.frame.origin.y += self.view.frame.height + self.enemyPod.frame.height
         }
     }
-    
     private func rockOneAnimation () {
         rockOne.frame = CGRect(x: 0, y: Int(view.frame.minY - rockOne.frame.height) , width: Constraint.rockOneWidth, height: Constraint.rockOneHeight)
         let minPosition = view.frame.origin.y + CGFloat(Constraint.rockOneWidth)
@@ -353,6 +374,12 @@ final class GameViewController: UIViewController {
             self.reStartGame()
         }))
         present(alert,animated: true)
+        
+        
+         LeaderboardManager.shared.addRecord(record: String(score), playerName: playerName, date: recordTime())
+        
+        print()
+        
     }
     
     private func freezeAnimations() {
@@ -399,7 +426,7 @@ final class GameViewController: UIViewController {
     private func explosionAnimation(at center: CGPoint) {
         let explosionSize = CGSize(width: 100, height: 100)
         let explosion = UIImageView(image: UIImage(named: "explosionOne"))
-        
+    
         explosion.frame = CGRect(
             x: center.x - explosionSize.width / 2,
             y: center.y - explosionSize.height / 2,
@@ -422,7 +449,6 @@ final class GameViewController: UIViewController {
     
     private func checkForObstaclePassed (mainPod: CGFloat, obstacle: CGFloat, flag: Bool) -> Bool {
         var swichingFlag = flag
-        
         if mainPod < obstacle && !swichingFlag {
             swichingFlag = true
             score += 1
