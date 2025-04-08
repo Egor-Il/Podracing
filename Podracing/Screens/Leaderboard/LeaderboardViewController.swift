@@ -147,18 +147,18 @@ class LeaderboardViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     private func clearButtonPressed() {     // - надо доделать очистку таблицы. очистку ячеек
-        LeaderboardData().clearRecords()
+        
       //  print(LeaderboardData.LeaderboardDataArray)
     }
     
-//    func recordTime() {
-//        let savedDate = Date()
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "MMMM d, yyyy, HH:mm"
-//        let savedRaceDate = formatter.string(from: savedDate)
-//        print(savedRaceDate)
+    func recordTime() {
+        let savedDate = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM d, yyyy, HH:mm"
+        let savedRaceDate = formatter.string(from: savedDate)
+        print(savedRaceDate)
 //       leaderboardText.text = "1 - \(savedRaceDate)"
-//    }
+    }
     
 
     // MARK: - Extension
@@ -170,7 +170,7 @@ extension LeaderboardViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     //    leaderboardContent.count
       //  LeaderboardData.LeaderboardDataArray.count
-        20
+        LeaderboardManager.shared.getRecord().count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -178,7 +178,8 @@ extension LeaderboardViewController: UITableViewDelegate, UITableViewDataSource 
             return UITableViewCell()
         }
         
-        //cell.fillRaceResuld(recordInfo: LeaderboardManager(raceRecord: "23424", playerName: "Egor", recordDate: "21.21.12"))
+        cell.fillRaceResuld()
+        
         cell.contentView.backgroundColor = .clear
         cell.backgroundColor = .gray
         

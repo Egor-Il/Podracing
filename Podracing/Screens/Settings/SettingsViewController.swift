@@ -324,7 +324,7 @@ class SettingsViewController: UIViewController {
         barrierImage.image = UIImage(named: savedSettings.barrierName)
         userName.text = savedSettings.playerName
         sliderDifficultyLabel.text = savedSettings.difficultyLevel
-        difficultySlider.value = chosenDifficultValue
+        difficultySlider.value = chosenDifficultValue ?? 1
     }
     private func preLoadSavedSettings() {
         if let saved = UserDefaults.standard.value(SavedSettins.self, forKey: SettingsKeys.playerSettings) {
@@ -429,11 +429,11 @@ class SettingsViewController: UIViewController {
     
     private func saveSettings () {
         
-        let savedPlayerSettings = SavedSettins(selectedPod: chosenMainPod,
-                                               barrierName: chosenBarrier,
-                                               playerName: chosenPlayerName,
-                                               difficultyLevel: chosenDifficult,
-                                               difficultyLevelValue: chosenDifficultValue
+        let savedPlayerSettings = SavedSettins(selectedPod: chosenMainPod ?? Images.mainPod,
+                                               barrierName: chosenBarrier ?? Images.firstRock,
+                                               playerName: chosenPlayerName ?? "Skywalker",
+                                               difficultyLevel: chosenDifficult ?? "Medium",
+                                               difficultyLevelValue: chosenDifficultValue ?? 1
        )
         UserDefaults.standard.set(encodable: savedPlayerSettings, forKey: SettingsKeys.playerSettings)
     }
