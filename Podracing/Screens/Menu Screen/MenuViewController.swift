@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class MenuViewController: UIViewController {
+final class MenuViewController: UIViewController {
     // MARK: - Property
     
     private let menuScreen = UIImageView()
