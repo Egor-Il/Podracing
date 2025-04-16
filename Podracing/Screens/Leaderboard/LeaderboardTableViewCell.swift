@@ -29,34 +29,41 @@ class LeaderboardTableViewCell: UITableViewCell {
         label.font = UIFont(name: "Starjedi", size: 15)
         return label
     }()
+    private let blurView: UIVisualEffectView = {
+        let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.translatesAutoresizingMaskIntoConstraints = false
+        return blurView
+    }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        
+        contentView.backgroundColor = .clear
+        backgroundColor = .clear
+        contentView.insertSubview(blurView, at: 0)
         contentView.addSubview(playerName)
         contentView.addSubview(record)
         contentView.addSubview(recordDate)
         
+        blurView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         playerName.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(5)
             make.width.equalToSuperview().dividedBy(3)
             make.centerY.equalToSuperview()
-//            make.centerX.equalToSuperview()
         }
         record.snp.makeConstraints { make in
             make.left.equalTo(playerName.snp.right)
             make.width.equalToSuperview().dividedBy(3)
             make.centerY.equalToSuperview()
-//            make.centerX.equalToSuperview()
         }
         recordDate.snp.makeConstraints { make in
             make.left.equalTo(record.snp.right)
             make.right.equalToSuperview()
             make.centerY.equalToSuperview()
-//            make.centerX.equalToSuperview()
         }
-        
     }
     
     required init?(coder: NSCoder) {

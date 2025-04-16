@@ -13,15 +13,16 @@ final class SavedSettins: Codable {
     let barrierName: String
     let playerName: String
     let difficultyLevel: String
-    let difficultyLevelValue: Float
+    let difficultyLevelValue: Double
+    let difficultySliderValue: Float
     
-    init(selectedPod: String, barrierName: String, playerName: String, difficultyLevel: String, difficultyLevelValue: Float) {
+    init(selectedPod: String, barrierName: String, playerName: String, difficultyLevel: String, difficultyLevelValue: Double, difficultySliderValue: Float) {
         self.selectedPod = selectedPod
         self.barrierName = barrierName
         self.playerName = playerName
         self.difficultyLevel = difficultyLevel
         self.difficultyLevelValue = difficultyLevelValue
-        
+        self.difficultySliderValue = difficultySliderValue
     }
     
 }

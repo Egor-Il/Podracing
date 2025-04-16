@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class LeaderboardViewController: UIViewController {
+final class LeaderboardViewController: UIViewController {
     // MARK: - Property
     private let leaderboardImage: UIImageView = {
         let image = UIImageView()
@@ -31,8 +31,9 @@ class LeaderboardViewController: UIViewController {
     private let leaderboardHeader: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGray6
-        // view.alpha = 0.5
-        // view.layer.cornerRadius = 20
+        view.layer.cornerRadius = 20
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        view.layer.masksToBounds = true
         return view
     }()
     var headerTextRecord: UILabel = {
@@ -64,6 +65,8 @@ class LeaderboardViewController: UIViewController {
         table.backgroundColor = .clear
         table.allowsSelection = false
         table.showsVerticalScrollIndicator = false
+        
+      
         // table.separatorInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5) // - полоса разделения
         return table
     }()
@@ -141,6 +144,8 @@ class LeaderboardViewController: UIViewController {
             make.right.equalToSuperview().inset(30)
             make.bottom.equalToSuperview()
         }
+        scoreTable.bounces = false
+        scoreTable.alwaysBounceVertical = false
     }
     
     private func backButtonPressed() {
@@ -156,6 +161,7 @@ extension LeaderboardViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         LeaderboardManager.shared.getRecord().count
+        
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: LeaderboardTableViewCell.identifier, for: indexPath) as? LeaderboardTableViewCell else {
@@ -163,8 +169,11 @@ extension LeaderboardViewController: UITableViewDelegate, UITableViewDataSource 
         }
         let entry = LeaderboardManager.shared.getRecord()[indexPath.row]
         cell.configure(with: entry)
-        cell.contentView.backgroundColor = .clear
-        cell.backgroundColor = .gray
+//        cell.contentView.backgroundColor = .clear
+//        cell.backgroundColor = .gray
+        
         return cell
     }
+    
+    
 }

@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class SettingsViewController: UIViewController {
+final class SettingsViewController: UIViewController {
     // MARK: - Property
     private let backButton: UIButton = {
         let button = UIButton(type: .system)
@@ -99,6 +99,7 @@ class SettingsViewController: UIViewController {
         textField.delegate = self
         textField.backgroundColor = .lightGray
         textField.borderStyle = .roundedRect
+        
         return textField
     }()
     private let userNameLabel: UILabel = {
@@ -141,11 +142,12 @@ class SettingsViewController: UIViewController {
     private var currentPodIndex = 0
     private var currentBarrierIndex = 0
     
-    private var chosenPlayerName: String? /*= "Player"*/
-    private var chosenMainPod: String? /*= ""*/
-    private var chosenBarrier: String? /*= ""*/
-    private var chosenDifficult: String? /*= ""*/
-    private var chosenDifficultValue: Float? /*= 1*/
+    private var chosenPlayerName: String?
+    private var chosenMainPod: String?
+    private var chosenBarrier: String?
+    private var chosenDifficult: String?
+    private var chosenDifficultValue: Double?
+    private var chosenSliderPosition: Float?
     
     enum podImageChoice{
         case left
@@ -155,6 +157,20 @@ class SettingsViewController: UIViewController {
         case left
         case right
     }
+    enum DifficultyLevel: String {
+        case easy
+        case medium
+        case hard
+        
+        var speed: Double {
+            switch self {
+            case .easy: return 12
+            case .medium:  return 8
+            case .hard: return 6
+            }
+        }
+    }
+    
     // MARK: - life cycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -324,7 +340,7 @@ class SettingsViewController: UIViewController {
         barrierImage.image = UIImage(named: savedSettings.barrierName)
         userName.text = savedSettings.playerName
         sliderDifficultyLabel.text = savedSettings.difficultyLevel
-        difficultySlider.value = chosenDifficultValue ?? 1
+        difficultySlider.value = chosenSliderPosition ?? 1
     }
     private func preLoadSavedSettings() {
         if let saved = UserDefaults.standard.value(SavedSettins.self, forKey: SettingsKeys.playerSettings) {
@@ -332,6 +348,7 @@ class SettingsViewController: UIViewController {
             chosenMainPod = saved.selectedPod
             chosenBarrier = saved.barrierName
             chosenDifficult = saved.difficultyLevel
+            chosenSliderPosition = saved.difficultySliderValue
             chosenDifficultValue = saved.difficultyLevelValue
         }
     }
@@ -414,18 +431,32 @@ class SettingsViewController: UIViewController {
     @objc func difficultyChanged(_ sender: UISlider) {
         let roundedValue = round(sender.value)
         sender.value = roundedValue
-        if roundedValue == 0 {
-            sliderDifficultyLabel.text = "easy"
-        } else if roundedValue == 1 {
-            sliderDifficultyLabel.text = "medium"
-        } else if roundedValue == 2 {
-            sliderDifficultyLabel.text = "hard"
-        }
-        if let text = sliderDifficultyLabel.text {
-            chosenDifficult = text
-        }
-        chosenDifficultValue = roundedValue
+        
+        let difficultyLevels: [DifficultyLevel] = [.easy, .medium, .hard]
+        guard Int(roundedValue) < difficultyLevels.count else { return }
+        let selectedDifficulty = difficultyLevels[Int(roundedValue)]
+        
+        sliderDifficultyLabel.text = selectedDifficulty.rawValue
+        chosenDifficultValue = selectedDifficulty.speed
+        chosenDifficult = selectedDifficulty.rawValue
+        chosenSliderPosition = roundedValue
     }
+    
+//    @objc func difficultyChanged(_ sender: UISlider) {
+//        let roundedValue = round(sender.value)
+//        sender.value = roundedValue
+//        if roundedValue == 0 {
+//            sliderDifficultyLabel.text = "easy"
+//        } else if roundedValue == 1 {
+//            sliderDifficultyLabel.text = "medium"
+//        } else if roundedValue == 2 {
+//            sliderDifficultyLabel.text = "hard"
+//        }
+//        if let text = sliderDifficultyLabel.text {
+//            chosenDifficult = text
+//        }
+//        chosenDifficultValue = roundedValue
+//    }
     
     private func saveSettings () {
         
@@ -433,11 +464,13 @@ class SettingsViewController: UIViewController {
                                                barrierName: chosenBarrier ?? Images.firstRock,
                                                playerName: chosenPlayerName ?? "Skywalker",
                                                difficultyLevel: chosenDifficult ?? "Medium",
-                                               difficultyLevelValue: chosenDifficultValue ?? 1
+                                               difficultyLevelValue: chosenDifficultValue ?? 8,
+                                               difficultySliderValue: chosenSliderPosition ?? 1
        )
         UserDefaults.standard.set(encodable: savedPlayerSettings, forKey: SettingsKeys.playerSettings)
+        
     }
-    
+   
 }
 extension SettingsViewController: UITextFieldDelegate {
     
@@ -446,7 +479,7 @@ extension SettingsViewController: UITextFieldDelegate {
         guard let stringRange = Range(range, in: name) else { return false }
         let newName = name.replacingCharacters(in: stringRange, with: string)
         chosenPlayerName = newName
-        return true
+        return newName.count <= 10
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
