@@ -355,7 +355,6 @@ final class SettingsViewController: UIViewController {
     private func backPressed() {
         navigationController?.popViewController(animated: true)
         saveSettings()
-        // save()
     }
     
     private func podChoice(to direction: podImageChoice) {

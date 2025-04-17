@@ -8,24 +8,6 @@
 import UIKit
 import SnapKit
 
-//private extension Int {
-//    static let podWidth = 70
-//    static let podHeight = 180
-//    static let podEnemyWidth = 70
-//    static let podEnemyHeight = 180
-//    static let rockOneWidth = 54
-//    static let rockOneHeight = 115
-//    static let rockTwoWidth = 70
-//    static let rockTwoHeight = 70
-//    static var podPointX = 0
-//    static var podPointY = 0
-//    static let curbWidth = 45
-//    static let movementButtonSize = 50
-//    static let movementButtonOffSetSides = 50
-//    static let movementButtonOffSetBottom = 30
-//    static let podMovementStep = 25
-//}
-
 private enum Constraint {
     static let podWidth = 70
     static let podHeight = 180
@@ -77,20 +59,20 @@ final class GameViewController: UIViewController {
         pod.image = mainPod
         return pod
     }()
-    private var track: UIImageView = {
-        var trackField = UIImageView()
-        let track = UIImage(named: "trackVersionTwo")
-        trackField.image = track
-        return trackField
-    }()
     
-//    private var trackSecond: UIImageView = {
+//    private var track: UIImageView = {
 //        var trackField = UIImageView()
-//        let track = UIImage(named: "trackVersionTwo")
+//        let track = UIImage(named: "track")
 //        trackField.image = track
 //        return trackField
 //    }()
     
+    private let trackImages: [UIImageView] = (0..<3).map { _ in
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "SW")
+        return imageView
+    }
+        
     private var leftCurb: UIImageView = {
         var leftSide = UIImageView()
         let leftSideImage = UIImage(named: Images.leftCurb)
@@ -141,7 +123,11 @@ final class GameViewController: UIViewController {
     
     private var podStartPosition: CGPoint = .zero // create start position for restar game
     
-    private var displayLink: CADisplayLink?
+    private var trackDisplayLink: CADisplayLink?
+    private var enemyDisplayLink: CADisplayLink?
+    private var obstacleOneDisplayLink: CADisplayLink?
+    private var obstacleTwoDisplayLink: CADisplayLink?
+    private var collisionDisplayLink: CADisplayLink?
     
     private var enemyPodPassed = false
     private var rockOnePassed = false
@@ -172,7 +158,11 @@ final class GameViewController: UIViewController {
 //    }
     // MARK: - UI configutarion
     private func configurationGameUI() {
-        view.addSubview(track)
+        
+        for track in trackImages {
+            view.addSubview(track)
+        }
+//        view.addSubview(track)
         view.addSubview(leftCurb)
         view.addSubview(rightCurb)
         view.addSubview(rockOne)
@@ -188,7 +178,16 @@ final class GameViewController: UIViewController {
         leftButton.clipsToBounds = true
         rightButton.layer.cornerRadius = CGFloat(Constraint.movementButtonSize / 2)
         rightButton.clipsToBounds = true
+        
         // MARK: - View position
+        
+        for (index, track) in trackImages.enumerated() {
+            track.frame = CGRect(x: 0,
+                                 y: -view.frame.height * CGFloat(index),
+                                 width: view.frame.width,
+                                 height: view.frame.height)
+        }
+        
         Constraint.podPointX = Int(view.frame.width / 2) - Constraint.podWidth / 2
         Constraint.podPointY = Int(view.frame.height / 1.45)
         mainPod.frame = CGRect(x: Constraint.podPointX, y: Constraint.podPointY, width: Constraint.podWidth, height: Constraint.podHeight)
@@ -196,6 +195,7 @@ final class GameViewController: UIViewController {
         enemyPod.frame = CGRect(x: 0, y: 0, width: Constraint.podEnemyWidth , height: Constraint.podEnemyHeight)
         rockOne.frame = CGRect(x: 0, y: 0, width: Constraint.rockOneWidth, height: Constraint.rockOneHeight)
         rockTwo.frame = CGRect(x: 0, y: 0, width: Constraint.rockTwoWidth, height: Constraint.rockTwoHeight)
+        
         
         // MARK: - Animation function call
         startGame()
@@ -220,21 +220,21 @@ final class GameViewController: UIViewController {
     }
     // MARK: - Action func
     private func setupConstraints() {
-        track.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        leftCurb.snp.makeConstraints { make in
-            make.left.equalToSuperview()
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.width.equalTo(Constraint.curbWidth)
-        }
-        rightCurb.snp.makeConstraints { make in
-            make.right.equalToSuperview()
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.width.equalTo(Constraint.curbWidth)
-        }
+//        track.snp.makeConstraints { make in
+//            make.edges.equalToSuperview()
+//        }
+//        leftCurb.snp.makeConstraints { make in
+//            make.left.equalToSuperview()
+//            make.top.equalToSuperview()
+//            make.bottom.equalToSuperview()
+//            make.width.equalTo(Constraint.curbWidth)
+//        }
+//        rightCurb.snp.makeConstraints { make in
+//            make.right.equalToSuperview()
+//            make.top.equalToSuperview()
+//            make.bottom.equalToSuperview()
+//            make.width.equalTo(Constraint.curbWidth)
+//        }
         backButton.snp.makeConstraints { make in
             make.top.left.equalToSuperview().offset(Buttons.buttonOffSet)
         }
@@ -254,11 +254,14 @@ final class GameViewController: UIViewController {
         }
     }
     private func backPressed() {
+        pauseGame()
         let alert = UIAlertController(title: "Are you sure you want to exit the game", message: "all progress will be lost", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Exit", style: .destructive, handler: { _ in
             self.navigationController?.popToRootViewController(animated: true)
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { _ in
+            self.resumeGame()
+        }))
         present(alert, animated: true)
     }
     
@@ -282,25 +285,38 @@ final class GameViewController: UIViewController {
     }
     
     private func startTimerForObstacles() {
-        timerForEnemyPod = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { [weak self] _ in
-            self?.enemyPodAnimation (speed: self?.chosenGameSpeed ?? 8)
-        })
-        timetForRockOne = Timer.scheduledTimer(withTimeInterval: 12, repeats: true, block: {  [weak self] _ in
-            self?.rockOneAnimation(speed: self?.chosenGameSpeed ?? 8)
-        })
-        timetForRockTwo = Timer.scheduledTimer(withTimeInterval: 14, repeats: true, block: { [weak self] _ in
-            self?.rockTwoAnimation(speed: self?.chosenGameSpeed ?? 8)
-        })
-        timerForEnemyPod.fire()
-        timetForRockOne.fire()
-        timetForRockTwo.fire()
+//        timerForEnemyPod = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { [weak self] _ in
+//            self?.enemyPodAnimation (speed: self?.chosenGameSpeed ?? 8)
+//        })
+//        timetForRockOne = Timer.scheduledTimer(withTimeInterval: 12, repeats: true, block: {  [weak self] _ in
+//            self?.rockOneAnimation(speed: self?.chosenGameSpeed ?? 8)
+//        })
+//        timetForRockTwo = Timer.scheduledTimer(withTimeInterval: 14, repeats: true, block: { [weak self] _ in
+//            self?.rockTwoAnimation(speed: self?.chosenGameSpeed ?? 8)
+//        })
+//        timerForEnemyPod.fire()
+//        timetForRockOne.fire()
+//        timetForRockTwo.fire()
     }
     
     private func pauseTimerForObstacles() {
-        timerForEnemyPod.invalidate()
-        timetForRockOne.invalidate()
-        timetForRockTwo.invalidate()
+//        timerForEnemyPod.invalidate()
+//        timetForRockOne.invalidate()
+//        timetForRockTwo.invalidate()
     }
+    
+    @objc private func updateTracks() {
+            for track in trackImages {
+                track.frame.origin.y += 2
+            }
+            for track in trackImages {
+                if track.frame.origin.y >= view.frame.height {
+                    if let topY = trackImages.map({ $0.frame.origin.y }).min() {
+                        track.frame.origin.y = topY - view.frame.height
+                    }
+                }
+            }
+        }
     
     private func shipMovment(to direction:Direction) {
         switch direction {
@@ -319,47 +335,65 @@ final class GameViewController: UIViewController {
     }
     
     private func podAnimation() {
-        UIView.animateKeyframes(withDuration: 0.3, delay: 0, options: [.autoreverse, .repeat]) {
+        UIView.animate(withDuration: 0.3,
+                       delay: 0,
+                       options: [.autoreverse, .repeat],
+                       animations: {
             self.mainPod.transform = CGAffineTransform(translationX: 1, y: 1)
+        })
+        
+//        UIView.animateKeyframes(withDuration: 0.3, delay: 0, options: [.autoreverse, .repeat]) {
+//            self.mainPod.transform = CGAffineTransform(translationX: 1, y: 1)
+//        }
+    }
+    
+    @objc private func enemyMovement() {
+        enemyPod.frame.origin.y += 3
+        if enemyPod.frame.origin.y > view.frame.height {
+            enemyPod.frame.origin.y = -enemyPod.frame.height
+            let minPosition = view.frame.origin.x + CGFloat(Constraint.podEnemyWidth)
+            let maxPosition = view.frame.width - CGFloat(Constraint.podEnemyWidth)
+            let enemyPosition = CGFloat.random(in: minPosition...maxPosition)
+            self.enemyPod.center.x = enemyPosition
         }
     }
     
-    private func enemyPodAnimation (speed: Double) {
-        enemyPod.frame = CGRect(x: 0, y: Int(view.frame.minY - enemyPod.frame.height), width: Constraint.podEnemyWidth , height: Constraint.podEnemyHeight)
-        let minPosition = view.frame.origin.x + CGFloat(Constraint.podEnemyWidth)
-        let maxPosition = view.frame.width - CGFloat(Constraint.podEnemyWidth)
-        let enemyPosition = CGFloat.random(in: minPosition...maxPosition)
-        self.enemyPod.center.x = enemyPosition
-        UIView.animate(withDuration: speed, delay: 0.3, options: [.curveLinear]) {
-            self.enemyPod.frame.origin.y += self.view.frame.height + self.enemyPod.frame.height
+    @objc private func obstacleOneMovement() {
+        rockOne.frame.origin.y += 3
+        if rockOne.frame.origin.y > view.frame.height {
+            rockOne.frame.origin.y = -rockOne.frame.origin.y
+            let minPosition = view.frame.origin.y + CGFloat(Constraint.rockOneWidth)
+            let maxPosition = view.frame.width - CGFloat(Constraint.rockOneWidth)
+            let rockOnePosition = CGFloat.random(in: minPosition...maxPosition)
+            self.rockOne.center.x = rockOnePosition
         }
     }
-    
-    private func rockOneAnimation (speed: Double) {
-        rockOne.frame = CGRect(x: 0, y: Int(view.frame.minY - rockOne.frame.height) , width: Constraint.rockOneWidth, height: Constraint.rockOneHeight)
-        let minPosition = view.frame.origin.y + CGFloat(Constraint.rockOneWidth)
-        let maxPosition = view.frame.width - CGFloat(Constraint.rockOneWidth)
-        let rockOnePosition = CGFloat.random(in: minPosition...maxPosition)
-        self.rockOne.center.x = rockOnePosition
-        UIView.animate(withDuration: speed, delay: 3.3, options: [.curveLinear]) {
-            self.rockOne.frame.origin.y += self.view.frame.height + self.rockOne.frame.height
+    @objc private func obstacleTwoMovement() {
+        rockTwo.frame.origin.y += 3
+        if rockTwo.frame.origin.y > view.frame.height {
+            rockTwo.frame.origin.y = -rockTwo.frame.origin.y
+            let minPosition = view.frame.origin.x + CGFloat(Constraint.rockTwoWidth)
+            let maxPosition = view.frame.width - CGFloat(Constraint.rockTwoWidth)
+            let rockTwoPosition = CGFloat.random(in: minPosition...maxPosition) // - надо создать одну переменную на все обьекты
+            self.rockTwo.center.x = rockTwoPosition
         }
     }
-    
-    private func rockTwoAnimation (speed: Double) {
-        rockTwo.frame = CGRect(x: 0, y: Int(view.frame.minY - rockTwo.frame.height) , width: Constraint.rockTwoWidth, height: Constraint.rockTwoHeight)
-        let minPosition = view.frame.origin.x + CGFloat(Constraint.rockTwoWidth)
-        let maxPosition = view.frame.width - CGFloat(Constraint.rockTwoWidth)
-        let rockTwoPosition = CGFloat.random(in: minPosition...maxPosition) // - надо создать одну переменную на все обьекты
-        self.rockTwo.center.x = rockTwoPosition
-        UIView.animate(withDuration: speed, delay: 5.3, options: [.curveLinear]) {
-            self.rockTwo.frame.origin.y += self.view.frame.height + self.rockTwo.frame.height
-        }
-    }
-    
+
     private func startGame() {
-        displayLink = CADisplayLink(target: self, selector: #selector(checkCollision))
-        displayLink?.add(to: .main, forMode: .default)
+        collisionDisplayLink = CADisplayLink(target: self, selector: #selector(checkCollision))
+        collisionDisplayLink?.add(to: .main, forMode: .common)
+        
+        trackDisplayLink = CADisplayLink(target: self, selector: #selector(updateTracks))
+        trackDisplayLink?.add(to: .main, forMode: .common)
+        
+        enemyDisplayLink = CADisplayLink(target: self, selector: #selector(enemyMovement))
+        enemyDisplayLink?.add(to: .main, forMode: .common)
+        
+        obstacleOneDisplayLink = CADisplayLink(target: self, selector: #selector(obstacleOneMovement))
+        obstacleOneDisplayLink?.add(to: .main, forMode: .common)
+        
+        obstacleTwoDisplayLink = CADisplayLink(target: self, selector: #selector(obstacleTwoMovement))
+        obstacleTwoDisplayLink?.add(to: .main, forMode: .common)
     }
     
     private func reStartGame() {
@@ -374,10 +408,13 @@ final class GameViewController: UIViewController {
     }
     
     private func gameOver() {
-        displayLink?.invalidate()
-        displayLink = nil
+        stopGame()
+        
         freezeAnimations()
-        view.subviews.forEach { $0.layer.removeAllAnimations() }
+        
+    
+        mainPod.layer.removeAllAnimations()
+        mainPod.transform = .identity  // this 2 line of code helps prevent the animation from freezing after a restart
         
         pauseTimerForObstacles()
         
@@ -390,6 +427,34 @@ final class GameViewController: UIViewController {
         }))
         present(alert,animated: true)
         LeaderboardManager.shared.addRecord(record: score, playerName: playerName, date: recordTime())
+    }
+    
+    private func stopGame() {
+        trackDisplayLink?.invalidate()
+        enemyDisplayLink?.invalidate()
+        collisionDisplayLink?.invalidate()
+        obstacleOneDisplayLink?.invalidate()
+        obstacleTwoDisplayLink?.invalidate()
+        
+        trackDisplayLink = nil
+        enemyDisplayLink = nil
+        collisionDisplayLink = nil
+        obstacleOneDisplayLink = nil
+        obstacleTwoDisplayLink = nil
+    }
+    
+    private func pauseGame() {
+        trackDisplayLink?.isPaused = true
+        enemyDisplayLink?.isPaused = true
+        collisionDisplayLink?.isPaused = true
+        obstacleOneDisplayLink?.isPaused = true
+    }
+    private func resumeGame() {
+        trackDisplayLink?.isPaused = false
+        enemyDisplayLink?.isPaused = false
+        collisionDisplayLink?.isPaused = false
+        obstacleOneDisplayLink?.isPaused = false
+        obstacleTwoDisplayLink?.isPaused = false
     }
     
     private func freezeAnimations() {
