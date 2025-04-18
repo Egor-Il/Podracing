@@ -11,8 +11,6 @@ final class Images {
     static let settings: String = "settingImage"
     static let leaderboard: String = "leaderBoard"
     static let track: String = "track"
-    static let leftCurb: String = "leftCurb"
-    static let rightCurb: String = "rightCurb"
     static let mainPod: String = "mainPod"
     static let podTwo: String = "podTwo"
     static let podThree: String = "podThree"
