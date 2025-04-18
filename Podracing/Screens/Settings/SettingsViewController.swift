@@ -164,9 +164,9 @@ final class SettingsViewController: UIViewController {
         
         var speed: Double {
             switch self {
-            case .easy: return 12
-            case .medium:  return 8
-            case .hard: return 6
+            case .easy: return 2
+            case .medium:  return 3
+            case .hard: return 5
             }
         }
     }
