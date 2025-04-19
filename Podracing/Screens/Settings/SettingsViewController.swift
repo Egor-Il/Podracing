@@ -59,6 +59,7 @@ final class SettingsViewController: UIViewController {
         let label = UILabel()
         label.text = "selected pod" // do I need to move it to extension?
         label.textAlignment = .center
+        label.textColor = .black
         label.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
         return label
     }()
@@ -86,6 +87,7 @@ final class SettingsViewController: UIViewController {
         label.text = "selected barrier" // do I need to move it to extension?
         label.textAlignment = .center
         label.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
+        label.textColor = .black
         return label
     }()
     private let userNameContainer: UIView = {
@@ -99,7 +101,7 @@ final class SettingsViewController: UIViewController {
         textField.delegate = self
         textField.backgroundColor = .lightGray
         textField.borderStyle = .roundedRect
-        
+        textField.textColor = .black
         return textField
     }()
     private let userNameLabel: UILabel = {
@@ -107,6 +109,7 @@ final class SettingsViewController: UIViewController {
         label.text = "player name" // do I need to move it to extension?
         label.textAlignment = .center
         label.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
+        label.textColor = .black
         return label
     }()
     
@@ -129,6 +132,7 @@ final class SettingsViewController: UIViewController {
         label.text = "Difficulty Level"  // do I need to move it to extension?
         label.textAlignment = .center
         label.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
+        label.textColor = .black
         return label
     }()
     private let sliderDifficultyLabel: UILabel = {
@@ -136,6 +140,7 @@ final class SettingsViewController: UIViewController {
         label.text = "medium"   // do I need to move it to extension?
         label.textAlignment = .center
         label.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
+        label.textColor = .black
         return label
     }()
     

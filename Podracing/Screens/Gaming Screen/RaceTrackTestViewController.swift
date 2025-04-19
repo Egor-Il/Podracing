@@ -8,17 +8,21 @@ class RaceTrackTestViewController: UIViewController {
 
     private let trackImages: [UIImageView] = (0..<3).map { _ in
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "trackWithCurb")
+        imageView.image = UIImage(named: Images.track)
         return imageView
     }
 
     private let upButton = UIButton(type: .system)
     private let downButton = UIButton(type: .system)
+    
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        startTrackAnimation()
+       // startTrackAnimation()
+       // animateCountdown(number: 3)
     }
 
     private func setupUI() {
@@ -27,7 +31,7 @@ class RaceTrackTestViewController: UIViewController {
         }
 
         view.addSubview(upButton)
-        view.addSubview(downButton)
+//        view.addSubview(downButton)
 
         // Расстановка кнопок
         upButton.setTitle("UP", for: .normal)
@@ -39,13 +43,14 @@ class RaceTrackTestViewController: UIViewController {
         downButton.addTarget(self, action: #selector(decreaseSpeed), for: .touchUpInside)
 
         upButton.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview().offset(-300)
         }
 
-        downButton.snp.makeConstraints { make in
-            make.top.equalTo(upButton.snp.bottom).offset(16)
-            make.centerX.equalToSuperview()
-        }
+//        downButton.snp.makeConstraints { make in
+//            make.top.equalTo(upButton.snp.bottom).offset(16)
+//            make.centerX.equalToSuperview()
+//        }
 
         // Изначальная расстановка треков
         for (index, track) in trackImages.enumerated() {
@@ -76,10 +81,82 @@ class RaceTrackTestViewController: UIViewController {
     }
 
     @objc private func increaseSpeed() {
-        speed += 1
+        self.animateCountdown(number: 3)
     }
 
     @objc private func decreaseSpeed() {
-        speed = max(1, speed - 1)
+        displayLink?.isPaused = false
+    }
+    
+    private func countdownAnimation() {
+        var countdownNumber = 3
+        let countdownLabel = UILabel()
+        countdownLabel.text = "\(countdownNumber)"
+        countdownLabel.font = UIFont(name: Font.fontName, size: 10)
+       // countdownLabel.transform = CGAffineTransform(scaleX: 2, y: 2)
+        
+        view.addSubview(countdownLabel)
+        
+        countdownLabel.snp.makeConstraints { make in
+            make.centerX.centerY.equalToSuperview()
+        }
+        
+        UIView.animate(withDuration: 1, animations: {
+            countdownLabel.alpha = 0
+            countdownLabel.transform = CGAffineTransform.init(scaleX: 20, y: 20)
+        }) {_ in 
+            UIView.animate(withDuration: 1) {
+                
+                countdownLabel.alpha = 1
+                countdownLabel.text = "\(countdownNumber - 1)"
+                countdownLabel.alpha = 0
+                countdownLabel.transform = CGAffineTransform.init(scaleX: 20, y: 20)
+            } completion: { _ in
+                countdownNumber -= 1
+                countdownLabel.alpha = 0
+                countdownLabel.transform = CGAffineTransform.init(scaleX: 20, y: 20)
+            }
+
+        }
+        
+    }
+    
+    func animateCountdown(number: Int) {
+        
+        
+        let countdownLabel = UILabel()
+        countdownLabel.text = "\(number)"
+        countdownLabel.font = UIFont(name: Font.fontName, size: 10)
+        countdownLabel.text = "\(number)"
+        countdownLabel.alpha = 1
+        countdownLabel.transform = CGAffineTransform(scaleX: 2, y: 2)
+        
+        view.addSubview(countdownLabel)
+        
+        countdownLabel.snp.makeConstraints { make in
+            make.centerX.centerY.equalToSuperview()
+        }
+
+        UIView.animate(withDuration: 1, animations: {
+            countdownLabel.alpha = 0
+            countdownLabel.transform = CGAffineTransform(scaleX: 20, y: 20)
+        }) { _ in
+            countdownLabel.removeFromSuperview()
+            if number > 1 {
+                
+            } else {
+                countdownLabel.text = "go"
+                countdownLabel.alpha = 1
+                countdownLabel.transform = CGAffineTransform(scaleX: 2, y: 2)
+
+                UIView.animate(withDuration: 1, animations: {
+                    countdownLabel.alpha = 0
+                    countdownLabel.transform = CGAffineTransform(scaleX: 20, y: 20)
+                }) { _ in
+                    print("hello")
+                }
+            }
+        }
+        
     }
 }
