@@ -60,16 +60,9 @@ final class GameViewController: UIViewController {
         return pod
     }()
     
-    //    private var track: UIImageView = {
-    //        var trackField = UIImageView()
-    //        let track = UIImage(named: "track")
-    //        trackField.image = track
-    //        return trackField
-    //    }()
-    
     private let trackImages: [UIImageView] = (0..<3).map { _ in
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "SW")
+        imageView.image = UIImage(named: Images.track)
         return imageView
     }
     
@@ -100,10 +93,17 @@ final class GameViewController: UIViewController {
         return label
     }()
     
-    private var timerForEnemyPod = Timer()
-    private var timetForRockOne = Timer()
-    private var timetForRockTwo = Timer()
+    private lazy var countdownLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: Font.fontName, size: 10)
+        label.textColor = .black
+        label.textAlignment = .center
+        return label
+    }()
     
+    
+    
+
     enum Direction{
         case left
         case right
@@ -125,9 +125,6 @@ final class GameViewController: UIViewController {
     
     private var score = 0
     private  var nextScoreThreshold = 10
-    
-    //    var chosenPod: Any = ""
-    //    var chosenName: Any = ""
     private var playerName:String = ""
     private var chosenGameSpeed: Double?
     
@@ -151,7 +148,6 @@ final class GameViewController: UIViewController {
         for track in trackImages {
             view.addSubview(track)
         }
-        //        view.addSubview(track)
         view.addSubview(rockOne)
         view.addSubview(rockTwo)
         view.addSubview(enemyPod)
@@ -176,16 +172,14 @@ final class GameViewController: UIViewController {
         }
         
         setStartingPosition()
-        
-        
-        
-        
-        
-        
         // MARK: - Animation function call
-        startGame()
-        startTimerForObstacles()
-        podAnimation()
+      //  startGame()
+     //   startTimerForObstacles()
+    //    podAnimation()
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+//            self.startGame()
+//            self.podAnimation()
+//        }
         
         // MARK: - Left/Right buttons setups
         let backActionPressed = UIAction { _ in
@@ -197,13 +191,15 @@ final class GameViewController: UIViewController {
         let rightActionPressed = UIAction { _ in
             self.shipMovment(to: .right)
         }
-        
         leftButton.addAction(leftActionPressed, for: .touchUpInside)
         rightButton.addAction(rightActionPressed, for: .touchUpInside)
         backButton.addAction(backActionPressed, for: .touchUpInside)
         reloadSettings()
+        
+        addCoundown()
+        countdownAnimation(number: 3)
     }
-    // MARK: - Action func
+    // MARK: - Setup Constraints
     private func setupConstraints() {
         
         backButton.snp.makeConstraints { make in
@@ -224,6 +220,47 @@ final class GameViewController: UIViewController {
             make.width.height.equalTo(Constraint.movementButtonSize)
         }
     }
+    
+    private func addCoundown() {
+        view.addSubview(countdownLabel)
+        countdownLabel.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
+    }
+    // MARK: - Countdown Animtion
+    private func countdownAnimation(number: Int) {
+        countdownLabel.text = "\(number)"
+        countdownLabel.alpha = 1
+        UIView.animate(withDuration: 1) {
+            self.countdownLabel.alpha = 0
+            self.countdownLabel.transform = CGAffineTransform(scaleX: 20, y: 20)
+        } completion: { _ in
+            if number > 1 {
+                self.countdownLabel.alpha = 1
+                self.countdownLabel.transform = CGAffineTransform(scaleX: 2, y: 2)
+                self.countdownAnimation(number: number - 1)
+            } else if number == 1 {
+                self.animateGo()
+            }
+        }
+    }
+    private func animateGo() {
+        countdownLabel.text = "go"
+        countdownLabel.alpha = 1
+        countdownLabel.transform = CGAffineTransform(scaleX: 2, y: 2)
+        UIView.animate(withDuration: 1) {
+            self.countdownLabel.alpha = 0
+            self.countdownLabel.transform = CGAffineTransform(scaleX: 20, y: 20)
+        } completion: { _ in
+            self.removeCountdown()
+            self.startGame()
+            self.podAnimation()
+        }
+    }
+    private func removeCountdown() {
+        countdownLabel.removeFromSuperview()
+    }
+    // MARK: - Buttons Setup
     private func backPressed() {
         pauseGame()
         let alert = UIAlertController(title: "Are you sure you want to exit the game", message: "all progress will be lost", preferredStyle: .alert)
@@ -235,7 +272,26 @@ final class GameViewController: UIViewController {
         }))
         present(alert, animated: true)
     }
-    
+    private func shipMovment(to direction:Direction) {
+        switch direction {
+        case.left:  if mainPod.frame.origin.x > self.view.frame.origin.x + CGFloat(Constraint.podMovementStep)  {
+            UIView.animate(withDuration: 0.3) {
+                self.mainPod.frame.origin.x -= CGFloat(Constraint.podMovementStep)
+            }
+        }
+        case .right:
+            if mainPod.frame.origin.x + mainPod.frame.width < self.view.frame.width - CGFloat(Constraint.podMovementStep) {
+                UIView.animate(withDuration: 0.3) {
+                    self.mainPod.frame.origin.x += CGFloat(Constraint.podMovementStep)
+                }
+            }
+        }
+    }
+    private func exitToMainMenu() {
+        stopGame()
+        navigationController?.popToRootViewController(animated: true)
+    }
+    // MARK: - Buttons Setup
     private func reloadSettings() {
         guard let savedSettings = UserDefaults.standard.value(SavedSettins.self, forKey: SettingsKeys.playerSettings) else {
             playerName = "Skywalker"
@@ -253,21 +309,6 @@ final class GameViewController: UIViewController {
         formatter.dateFormat = "dd.MM.yy"
         let savedRaceDate = formatter.string(from: savedDate)
         return savedRaceDate
-    }
-    
-    private func startTimerForObstacles() {
-        //        timerForEnemyPod = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { [weak self] _ in
-        //            self?.enemyPodAnimation (speed: self?.chosenGameSpeed ?? 8)
-        //        })
-        //        timetForRockOne = Timer.scheduledTimer(withTimeInterval: 12, repeats: true, block: {  [weak self] _ in
-        //            self?.rockOneAnimation(speed: self?.chosenGameSpeed ?? 8)
-        //        })
-        //        timetForRockTwo = Timer.scheduledTimer(withTimeInterval: 14, repeats: true, block: { [weak self] _ in
-        //            self?.rockTwoAnimation(speed: self?.chosenGameSpeed ?? 8)
-        //        })
-        //        timerForEnemyPod.fire()
-        //        timetForRockOne.fire()
-        //        timetForRockTwo.fire()
     }
     
     @objc private func updateTracks() {
@@ -312,21 +353,7 @@ final class GameViewController: UIViewController {
         rockOne.frame = CGRect(x: rockOneX, y: -Constraint.rockOneHeight, width: Constraint.rockOneWidth, height: Constraint.rockOneHeight)
     }
     
-    private func shipMovment(to direction:Direction) {
-        switch direction {
-        case.left:  if mainPod.frame.origin.x > self.view.frame.origin.x + CGFloat(Constraint.podMovementStep)  {
-            UIView.animate(withDuration: 0.3) {
-                self.mainPod.frame.origin.x -= CGFloat(Constraint.podMovementStep)
-            }
-        }
-        case .right:
-            if mainPod.frame.origin.x + mainPod.frame.width < self.view.frame.width - CGFloat(Constraint.podMovementStep) {
-                UIView.animate(withDuration: 0.3) {
-                    self.mainPod.frame.origin.x += CGFloat(Constraint.podMovementStep)
-                }
-            }
-        }
-    }
+    
     
     private func podAnimation() {
         UIView.animate(withDuration: 0.3,
@@ -377,6 +404,7 @@ final class GameViewController: UIViewController {
         }
     }
     
+    
     private func startGame() {
         collisionDisplayLink = CADisplayLink(target: self, selector: #selector(checkCollision))
         collisionDisplayLink?.add(to: .main, forMode: .common)
@@ -396,7 +424,6 @@ final class GameViewController: UIViewController {
         let link = CADisplayLink(target: self, selector: #selector(dynamicScoreChange))
         link.add(to: .main, forMode: .common)
         
-        
     }
     
     private func reStartGame() {
@@ -408,7 +435,6 @@ final class GameViewController: UIViewController {
         setStartingPosition()
         startGame()
         podAnimation()
-        
     }
     
     private func resetScore() {
@@ -424,7 +450,6 @@ final class GameViewController: UIViewController {
     }
     
     private func gameOver() {
-        
        stopGame()
        freezeAnimations()
         
@@ -450,6 +475,7 @@ final class GameViewController: UIViewController {
         collisionDisplayLink?.invalidate()
         obstacleOneDisplayLink?.invalidate()
         obstacleTwoDisplayLink?.invalidate()
+        
         
         trackDisplayLink = nil
         enemyDisplayLink = nil
@@ -551,8 +577,5 @@ final class GameViewController: UIViewController {
         return swichingFlag
     }
     
-    private func exitToMainMenu() {
-        stopGame()
-        navigationController?.popToRootViewController(animated: true)
-    }
+    
 }
