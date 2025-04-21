@@ -12,14 +12,14 @@ final class SettingsViewController: UIViewController {
     // MARK: - Property
     private let backButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(Buttons.buttonBackLable, for: .normal)
+        button.setTitle(SettingsConstants.Strings.back, for: .normal)
         button.setTitleColor(.green, for: .normal)
-        button.titleLabel?.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
+        button.titleLabel?.font = UIFont(name: SettingsConstants.Font.fontName, size: SettingsConstants.Font.buttonsSize)
         return button
     }()
     private let settingImageView: UIImageView = {
         let image = UIImageView()
-        let settingImage = UIImage(named: Images.settings)
+        let settingImage = UIImage(named: SettingsConstants.Strings.settingsPicName)
         image.image = settingImage
         return image
     }()
@@ -38,14 +38,14 @@ final class SettingsViewController: UIViewController {
         return view
     }()
     private let podChoiceleftButton: UIButton = {
-        let button = UIButton(type: .system)
-        let leftChoice =  UIImage(systemName: "arrowshape.left", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25, weight: .medium))
+        let button = UIButton(type: .custom)
+        let leftChoice = UIImage(named: SettingsConstants.Strings.leftArrow)
         button.setImage(leftChoice, for: .normal)
         return button
     }()
     private let podChoiceRightButton: UIButton = {
-        let button = UIButton(type: .system)
-        let rightChoice =  UIImage(systemName: "arrowshape.right", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25, weight: .medium))
+        let button = UIButton(type: .custom)
+        let rightChoice =  UIImage(named: SettingsConstants.Strings.rightArrow)
         button.setImage(rightChoice, for: .normal)
         return button
     }()
@@ -57,36 +57,36 @@ final class SettingsViewController: UIViewController {
     }()
     private let podLabel: UILabel = {
         let label = UILabel()
-        label.text = "selected pod" // do I need to move it to extension?
+        label.text = SettingsConstants.Strings.selectedPod
         label.textAlignment = .center
         label.textColor = .black
-        label.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
+        label.font = UIFont(name: SettingsConstants.Font.fontName, size: SettingsConstants.Font.buttonsSize)
         return label
     }()
     private let barrierChoiceleftButton: UIButton = {
-        let button = UIButton(type: .system)
-        let leftChoice =  UIImage(systemName: "arrowshape.left", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25, weight: .medium))
+        let button = UIButton(type: .custom)
+        let leftChoice = UIImage(named: SettingsConstants.Strings.leftArrow)
         button.setImage(leftChoice, for: .normal)
         return button
     }()
     private let barrierChoiceRightButton: UIButton = {
-        let button = UIButton(type: .system)
-        let rightChoice =  UIImage(systemName: "arrowshape.right", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25, weight: .medium))
+        let button = UIButton(type: .custom)
+        let rightChoice =  UIImage(named: SettingsConstants.Strings.rightArrow)
         button.setImage(rightChoice, for: .normal)
         return button
     }()
     private let barrierImage: UIImageView = {
         let view = UIImageView()
-        let startingBarrier = UIImage(named: "stoneOne")
+        let startingBarrier = UIImage(named: SettingsConstants.Strings.stoneOne)
         view.image = startingBarrier
         view.contentMode = .scaleAspectFit
         return view
     }()
     private let barrierLabel: UILabel = {
         let label = UILabel()
-        label.text = "selected barrier" // do I need to move it to extension?
+        label.text = SettingsConstants.Strings.selectedBarrier
         label.textAlignment = .center
-        label.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
+        label.font = UIFont(name: SettingsConstants.Font.fontName, size: SettingsConstants.Font.buttonsSize)
         label.textColor = .black
         return label
     }()
@@ -97,7 +97,7 @@ final class SettingsViewController: UIViewController {
     lazy var userName: UITextField = {
         let textField = UITextField()
         textField.textAlignment = .center
-        textField.placeholder = "Player"  // do I need to move it to extension?
+        textField.placeholder = SettingsConstants.Strings.player  
         textField.delegate = self
         textField.backgroundColor = .lightGray
         textField.borderStyle = .roundedRect
@@ -106,9 +106,9 @@ final class SettingsViewController: UIViewController {
     }()
     private let userNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "player name" // do I need to move it to extension?
+        label.text = SettingsConstants.Strings.playerName
         label.textAlignment = .center
-        label.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
+        label.font = UIFont(name: SettingsConstants.Font.fontName, size: SettingsConstants.Font.buttonsSize)
         label.textColor = .black
         return label
     }()
@@ -129,17 +129,17 @@ final class SettingsViewController: UIViewController {
     }()
     private let difficultyLevelLabel: UILabel = {
         let label = UILabel()
-        label.text = "Difficulty Level"  // do I need to move it to extension?
+        label.text = SettingsConstants.Strings.difficultyLevel
         label.textAlignment = .center
-        label.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
+        label.font = UIFont(name: SettingsConstants.Font.fontName, size: SettingsConstants.Font.buttonsSize)
         label.textColor = .black
         return label
     }()
     private let sliderDifficultyLabel: UILabel = {
         let label = UILabel()
-        label.text = "medium"   // do I need to move it to extension?
+        label.text = SettingsConstants.Strings.medium
         label.textAlignment = .center
-        label.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
+        label.font = UIFont(name: SettingsConstants.Font.fontName, size: SettingsConstants.Font.buttonsSize)
         label.textColor = .black
         return label
     }()
@@ -244,7 +244,7 @@ final class SettingsViewController: UIViewController {
             make.edges.equalToSuperview()
         }
         backButton.snp.makeConstraints { make in
-            make.left.top.equalToSuperview().offset(Buttons.buttonOffSet)
+            make.left.top.equalToSuperview().offset(SettingsConstants.Layout.buttonsOffset)
         }
         sittingsContainer.snp.makeConstraints { make in
             make.top.equalTo(backButton.snp.bottom)
@@ -259,12 +259,12 @@ final class SettingsViewController: UIViewController {
         podChoiceleftButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.left.equalToSuperview().offset(5)
-            make.width.height.equalTo(50)
+            make.width.height.equalTo(SettingsConstants.Layout.buttonsHeight)
         }
         podChoiceRightButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.right.equalToSuperview().inset(5)
-            make.width.height.equalTo(50)
+            make.width.height.equalTo(SettingsConstants.Layout.buttonsHeight)
         }
         podLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
@@ -286,12 +286,12 @@ final class SettingsViewController: UIViewController {
         barrierChoiceleftButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.left.equalToSuperview()
-            make.width.height.equalTo(50)
+            make.width.height.equalTo(SettingsConstants.Layout.buttonsHeight)
         }
         barrierChoiceRightButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.right.equalToSuperview()
-            make.width.height.equalTo(50)
+            make.width.height.equalTo(SettingsConstants.Layout.buttonsHeight)
         }
         barrierLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(5)
@@ -466,8 +466,8 @@ final class SettingsViewController: UIViewController {
         
         let savedPlayerSettings = SavedSettins(selectedPod: chosenMainPod ?? Images.mainPod,
                                                barrierName: chosenBarrier ?? Images.firstRock,
-                                               playerName: chosenPlayerName ?? "Skywalker",
-                                               difficultyLevel: chosenDifficult ?? "Medium",
+                                               playerName: chosenPlayerName ?? SettingsConstants.Strings.defaultName,
+                                               difficultyLevel: chosenDifficult ?? SettingsConstants.Strings.medium,
                                                difficultyLevelValue: chosenDifficultValue ?? 8,
                                                difficultySliderValue: chosenSliderPosition ?? 1
        )
@@ -476,6 +476,7 @@ final class SettingsViewController: UIViewController {
     }
    
 }
+// MARK: - Extension 
 extension SettingsViewController: UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

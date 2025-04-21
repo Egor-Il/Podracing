@@ -10,23 +10,23 @@ import UIKit
 class LeaderboardTableViewCell: UITableViewCell {
     
     static var identifier: String {"\(Self.self)"}
-    
+    // MARK: - Property
     private let record: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Starjedi", size: 15)
+        label.font = UIFont(name: LeaderboardConstants.Font.fontName, size: LeaderboardConstants.Font.recordFontSize)
         label.textAlignment = .center
         return label
     }()
     private let playerName: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Starjedi", size: 15)
+        label.font = UIFont(name: LeaderboardConstants.Font.fontName, size: LeaderboardConstants.Font.recordFontSize)
         label.textAlignment = .center
         return label
     }()
     private let recordDate: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont(name: "Starjedi", size: 15)
+        label.font = UIFont(name: LeaderboardConstants.Font.fontName, size: LeaderboardConstants.Font.recordFontSize)
         return label
     }()
     private let blurView: UIVisualEffectView = {
@@ -35,7 +35,7 @@ class LeaderboardTableViewCell: UITableViewCell {
         blurView.translatesAutoresizingMaskIntoConstraints = false
         return blurView
     }()
-    
+    // MARK: - Cell sutup 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -50,7 +50,7 @@ class LeaderboardTableViewCell: UITableViewCell {
             make.edges.equalToSuperview()
         }
         playerName.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(5)
+            make.left.equalToSuperview().offset(LeaderboardConstants.Layout.playerNameOffset)
             make.width.equalToSuperview().dividedBy(3)
             make.centerY.equalToSuperview()
         }

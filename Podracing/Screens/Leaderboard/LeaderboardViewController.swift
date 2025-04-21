@@ -14,49 +14,59 @@ final class LeaderboardViewController: UIViewController {
         let image = UIImageView()
         return image
     }()
+    
     private let buttonBack: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(Buttons.buttonBackLable, for: .normal)
+        button.setTitle(LeaderboardConstants.Strings.back, for: .normal)
         button.setTitleColor(.green, for: .normal)
-        button.titleLabel?.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
+        button.titleLabel?.font = UIFont(name: LeaderboardConstants.Font.fontName, size: LeaderboardConstants.Font.buttonBackFontSize)
         return button
     }()
+    
     private let buttonClear: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Clear", for: .normal)
+        button.setTitle(LeaderboardConstants.Strings.clear, for: .normal)
         button.setTitleColor(.green, for: .normal)
-        button.titleLabel?.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
+        button.titleLabel?.font = UIFont(name: LeaderboardConstants.Font.fontName, size: LeaderboardConstants.Font.buttonClearFontSize)
         return button
     }()
+    
     private let leaderboardHeader: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGray6
-        view.layer.cornerRadius = 20
+        view.layer.cornerRadius = LeaderboardConstants.Value.cornerRadius
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.layer.masksToBounds = true
         return view
     }()
+    
     var headerTextRecord: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont(name: Font.fontName, size: 16)
+        label.font = UIFont(name: LeaderboardConstants.Font.fontName, size: LeaderboardConstants.Font.headerFontSize)
+        label.text = LeaderboardConstants.Strings.record
         label.textColor = .black
         return label
     }()
+    
     var headerTextName: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont(name: Font.fontName, size: 16)
+        label.font = UIFont(name: LeaderboardConstants.Font.fontName, size: LeaderboardConstants.Font.headerFontSize)
+        label.text = LeaderboardConstants.Strings.name
         label.textColor = .black
         return label
     }()
+    
     var headerTextDate: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont(name: Font.fontName, size: 16)
+        label.font = UIFont(name: LeaderboardConstants.Font.fontName, size: LeaderboardConstants.Font.headerFontSize)
+        label.text = LeaderboardConstants.Strings.date
         label.textColor = .black
         return label
     }()
+    
     private lazy var scoreTable: UITableView = {
         let table = UITableView()
         table.register(LeaderboardTableViewCell.self, forCellReuseIdentifier: LeaderboardTableViewCell.identifier)
@@ -65,16 +75,16 @@ final class LeaderboardViewController: UIViewController {
         table.backgroundColor = .clear
         table.allowsSelection = false
         table.showsVerticalScrollIndicator = false
-        
-      
         // table.separatorInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5) // - полоса разделения
         return table
     }()
-    // MARK: - Another step
+    
+    // MARK: - Life cycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
         configuratLeaderBoardUI()
     }
+    // MARK: - Func Actions
     private func configuratLeaderBoardUI() {
         view.addSubview(leaderboardImage)
         view.addSubview(buttonBack)
@@ -85,13 +95,12 @@ final class LeaderboardViewController: UIViewController {
         leaderboardHeader.addSubview(headerTextRecord)
         leaderboardHeader.addSubview(headerTextName)
         leaderboardHeader.addSubview(headerTextDate)
-        let  boardImage = UIImage(named: Images.leaderboard)
+        
+        let  boardImage = UIImage(named: LeaderboardConstants.Strings.leaderboardPicName)
         leaderboardImage.image = boardImage
         
         setupConstraints()
-        // MARK: - Property Constraints
         
-        // MARK: - Buttons setup
         let backfromBoardAction = UIAction { _ in
             self.backButtonPressed()
         }
@@ -101,27 +110,26 @@ final class LeaderboardViewController: UIViewController {
         buttonBack.addAction(backfromBoardAction, for: .touchUpInside)
         buttonClear.addAction(clearLeaderboardAction, for: .touchUpInside)
     }
-    // MARK: - Functions
     
     private func setupConstraints()  {
         leaderboardImage.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         buttonBack.snp.makeConstraints { make in
-            make.top.left.equalToSuperview().offset(Buttons.buttonOffSet)
+            make.top.left.equalToSuperview().offset(LeaderboardConstants.Layout.buttonsOffset)
         }
         buttonClear.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(Buttons.buttonOffSet)
-            make.right.equalToSuperview().inset(Buttons.buttonOffSet)
+            make.top.equalToSuperview().offset(LeaderboardConstants.Layout.buttonsOffset)
+            make.right.equalToSuperview().inset(LeaderboardConstants.Layout.buttonsOffset)
         }
         leaderboardHeader.snp.makeConstraints { make in
-            make.top.equalTo(buttonBack.snp.bottom).offset(15)
-            make.left.equalToSuperview().offset(30)
-            make.right.equalToSuperview().inset(30)
-            make.height.equalTo(50)
+            make.top.equalTo(buttonBack.snp.bottom).offset(LeaderboardConstants.Layout.headerTopOffset)
+            make.left.equalToSuperview().offset(LeaderboardConstants.Layout.headerLeftRightOffset)
+            make.right.equalToSuperview().inset(LeaderboardConstants.Layout.headerLeftRightOffset)
+            make.height.equalTo(LeaderboardConstants.Layout.headerHeight)
         }
         headerTextName.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(5)
+            make.left.equalToSuperview().offset(LeaderboardConstants.Layout.headerNameOffset)
             make.width.equalToSuperview().dividedBy(3)
             make.centerY.equalToSuperview()
         }
@@ -135,13 +143,10 @@ final class LeaderboardViewController: UIViewController {
             make.right.equalToSuperview()
             make.centerY.equalToSuperview()
         }
-        headerTextRecord.text = "Record"
-        headerTextName.text = "Name"
-        headerTextDate.text = "Date"
         scoreTable.snp.makeConstraints { make in
             make.top.equalTo(leaderboardHeader.snp.bottom)
-            make.left.equalToSuperview().offset(30)
-            make.right.equalToSuperview().inset(30)
+            make.left.equalToSuperview().offset(LeaderboardConstants.Layout.scoreLabelLeftRightOffset)
+            make.right.equalToSuperview().inset(LeaderboardConstants.Layout.scoreLabelLeftRightOffset)
             make.bottom.equalToSuperview()
         }
         scoreTable.bounces = false
@@ -161,19 +166,17 @@ extension LeaderboardViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         LeaderboardManager.shared.getRecord().count
-        
     }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: LeaderboardTableViewCell.identifier, for: indexPath) as? LeaderboardTableViewCell else {
             return UITableViewCell()
         }
+        
         let entry = LeaderboardManager.shared.getRecord()[indexPath.row]
         cell.configure(with: entry)
-//        cell.contentView.backgroundColor = .clear
-//        cell.backgroundColor = .gray
-        
+        //        cell.contentView.backgroundColor = .clear
+        //        cell.backgroundColor = .gray
         return cell
     }
-    
-    
 }

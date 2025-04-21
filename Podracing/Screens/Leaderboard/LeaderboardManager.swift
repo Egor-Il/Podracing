@@ -13,12 +13,11 @@ struct LeaderboardEntry: Codable {
     let date: String
 }
 
-
 final class LeaderboardManager {
     
     static let shared = LeaderboardManager()
     private var leaderboardEntries: [LeaderboardEntry] = []
-    private let userDefaultsKey = "LeaderboardEntries"
+    private let userDefaultsKey = LeaderboardConstants.userDefaults.userDefaultsKey
     
     private init() {
         loadFromStorage()
