@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - Saving object
+
 final class SavedSettins: Codable {
     
     let selectedPod: String
@@ -17,6 +19,7 @@ final class SavedSettins: Codable {
     let difficultySliderValue: Float
     
     init(selectedPod: String, barrierName: String, playerName: String, difficultyLevel: String, difficultyLevelValue: Double, difficultySliderValue: Float) {
+        
         self.selectedPod = selectedPod
         self.barrierName = barrierName
         self.playerName = playerName

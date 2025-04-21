@@ -12,57 +12,64 @@ final class MenuViewController: UIViewController {
     // MARK: - Property
     
     private let menuScreen = UIImageView()
+    
     private let gameNameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: Font.fontName, size: Font.gameLabelFont )
+        label.font = UIFont(name: MenuConstants.Font.fontName, size: MenuConstants.Font.gameLabelSize )
         label.textColor = .white
-        label.text = Labels.gameName
+        label.text = MenuConstants.Strings.podracing
         return label
     }()
+    
     private let buttonsConteiner = UIView()
+    
     private let playButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(Buttons.playButtonLabel, for: .normal)
+        button.setTitle(MenuConstants.Strings.play, for: .normal)
         button.setTitleColor(.green, for: .normal)
-        button.titleLabel?.font = UIFont(name: Font.fontName, size: Font.buttonFont)
+        button.titleLabel?.font = UIFont(name: MenuConstants.Font.fontName, size: MenuConstants.Font.buttonsSize)
         return button
     }()
+    
     private let boardButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(Buttons.boardButtonLabel, for: .normal)
+        button.setTitle(MenuConstants.Strings.leaderboard, for: .normal)
         button.setTitleColor(.green, for: .normal)
-        button.titleLabel?.font = UIFont(name: Font.fontName, size: Font.buttonFont)
+        button.titleLabel?.font = UIFont(name: MenuConstants.Font.fontName, size: MenuConstants.Font.buttonsSize)
         return button
     }()
+    
     private let settingButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(Buttons.settingButtonLabel, for: .normal)
+        button.setTitle(MenuConstants.Strings.setting, for: .normal)
         button.setTitleColor(.green, for: .normal)
-        button.titleLabel?.font = UIFont(name: Font.fontName, size: Font.buttonFont)
+        button.titleLabel?.font = UIFont(name: MenuConstants.Font.fontName, size: MenuConstants.Font.buttonsSize)
         return button
     }()
-    private let createButton: (String) -> UIButton = { buttonTitle in
-        let button = UIButton(type: .system)
-        button.setTitle(buttonTitle, for: .normal)
-        button.setTitleColor(.green, for: .normal)
-        button.titleLabel?.font = UIFont(name: Font.fontName, size: Font.buttonFont)
-        return button
-    }
+    //    private let createButton: (String) -> UIButton = { buttonTitle in
+    //        let button = UIButton(type: .system)
+    //        button.setTitle(buttonTitle, for: .normal)
+    //        button.setTitleColor(.green, for: .normal)
+    //        button.titleLabel?.font = UIFont(name: Font.fontName, size: Font.buttonFont)
+    //        return button
+    //    }
     // MARK: - Life cycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
         configureMenuUI()
     }
     
+    // MARK: - Func Actions
     private func configureMenuUI() {
         view.addSubview(menuScreen)
         view.addSubview(gameNameLabel)
+        view.addSubview(buttonsConteiner)
         buttonsConteiner.addSubview(playButton)
         buttonsConteiner.addSubview(boardButton)
         buttonsConteiner.addSubview(settingButton)
-        view.addSubview(buttonsConteiner)
         setupConstraints()
-        let menuImage = UIImage(named: Images.menu)
+        
+        let menuImage = UIImage(named: MenuConstants.Strings.menuScreenPic)
         menuScreen.image = menuImage
         
         let playButtonAction = UIAction { _ in
@@ -78,19 +85,19 @@ final class MenuViewController: UIViewController {
         settingButton.addAction(settingsButtonAction, for: .touchUpInside)
         boardButton.addAction(leaderboardButtonAction, for: .touchUpInside)
     }
-    // MARK: - Actions
+    
     private func setupConstraints() {
         menuScreen.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         gameNameLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(Labels.gameNameLabelOffSet)
+            make.top.equalToSuperview().offset(MenuConstants.Layout.gameNameLabelTopOffset)
         }
         buttonsConteiner.snp.makeConstraints { make in
-            make.top.equalTo(gameNameLabel.snp.bottom).offset(Buttons.buttonOffSet)
+            make.top.equalTo(gameNameLabel.snp.bottom).offset(MenuConstants.Layout.buttonsOffset)
             make.left.right.equalToSuperview()
-            make.height.equalTo(Buttons.buttonsConteinerHeight)
+            make.height.equalTo(MenuConstants.Layout.buttonsConteinerHeight)
         }
         playButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()

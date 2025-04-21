@@ -9,6 +9,8 @@ import Foundation
 
 import Foundation
 
+// MARK: - Extension for save and load data 
+
 extension UserDefaults {
     
     func set<T: Encodable>(encodable: T, forKey key: String) {
