@@ -32,7 +32,7 @@ final class GameViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle(Buttons.buttonBackLable, for: .normal)
         button.setTitleColor(.green, for: .normal)
-        button.titleLabel?.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
+        button.titleLabel?.font = UIFont(name: GameConstants.Font.fontName, size: GameConstants.Font.buttonBackFontSize)
         return button
     }()
     private let leftButton: UIButton = {
@@ -87,7 +87,7 @@ final class GameViewController: UIViewController {
     
     private lazy var scoreLable: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: Font.fontName, size: Font.buttonBackFontSize)
+        label.font = UIFont(name: GameConstants.Font.fontName, size: GameConstants.Font.scoreLableFontSize)
         label.textColor = .white
         label.text = "Score: \(score)"
         return label
@@ -95,15 +95,12 @@ final class GameViewController: UIViewController {
     
     private lazy var countdownLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: Font.fontName, size: 10)
+        label.font = UIFont(name: GameConstants.Font.fontName, size: GameConstants.Font.countdownLabelFontSize)
         label.textColor = .black
         label.textAlignment = .center
         return label
     }()
     
-    
-    
-
     enum Direction{
         case left
         case right
@@ -123,8 +120,8 @@ final class GameViewController: UIViewController {
     
     private var isMovingLeft = false
     
-    private var score = 0
-    private  var nextScoreThreshold = 10
+    private var score = GameConstants.Value.score
+    private  var nextScoreThreshold = GameConstants.Value.nextScoreThreshold
     private var playerName:String = ""
     private var chosenGameSpeed: Double?
     
@@ -157,6 +154,7 @@ final class GameViewController: UIViewController {
         view.addSubview(backButton)
         view.addSubview(scoreLable)
         setupConstraints()
+        
         leftButton.layer.cornerRadius = CGFloat(Constraint.movementButtonSize / 2)
         leftButton.clipsToBounds = true
         rightButton.layer.cornerRadius = CGFloat(Constraint.movementButtonSize / 2)
@@ -203,11 +201,11 @@ final class GameViewController: UIViewController {
     private func setupConstraints() {
         
         backButton.snp.makeConstraints { make in
-            make.top.left.equalToSuperview().offset(Buttons.buttonOffSet)
+            make.top.left.equalToSuperview().offset(GameConstants.Layout.backButtonOffset)
         }
         scoreLable.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(Buttons.buttonOffSet)
-            make.right.equalToSuperview().inset(60)
+            make.top.equalToSuperview().offset(GameConstants.Layout.scoreLableOffsetTop)
+            make.right.equalToSuperview().inset(GameConstants.Layout.scoreLableOffsetRight)
         }
         leftButton.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(Constraint.movementButtonOffSetSides)
@@ -245,7 +243,7 @@ final class GameViewController: UIViewController {
         }
     }
     private func animateGo() {
-        countdownLabel.text = "go"
+        countdownLabel.text = GameConstants.Strings.countdownLabelGo
         countdownLabel.alpha = 1
         countdownLabel.transform = CGAffineTransform(scaleX: 2, y: 2)
         UIView.animate(withDuration: 1) {
@@ -263,11 +261,11 @@ final class GameViewController: UIViewController {
     // MARK: - Buttons Setup
     private func backPressed() {
         pauseGame()
-        let alert = UIAlertController(title: "Are you sure you want to exit the game", message: "all progress will be lost", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Exit", style: .destructive, handler: { _ in
+        let alert = UIAlertController(title: GameConstants.Strings.backAlertTitle, message: GameConstants.Strings.backAlertMessage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: GameConstants.Strings.backAlertTitleExit, style: .destructive, handler: { _ in
             self.navigationController?.popToRootViewController(animated: true)
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { _ in
+        alert.addAction(UIAlertAction(title: GameConstants.Strings.backAlertTitleCancel, style: .cancel, handler: { _ in
             self.resumeGame()
         }))
         present(alert, animated: true)
@@ -293,8 +291,8 @@ final class GameViewController: UIViewController {
     }
     // MARK: - Buttons Setup
     private func reloadSettings() {
-        guard let savedSettings = UserDefaults.standard.value(SavedSettins.self, forKey: SettingsKeys.playerSettings) else {
-            playerName = "Skywalker"
+        guard let savedSettings = UserDefaults.standard.value(SavedSettins.self, forKey: SettingsConstants.userDefaults.playerSettings) else {
+            playerName = GameConstants.Strings.defaultPlayerName
             return
         }
         mainPod.image = UIImage(named: savedSettings.selectedPod)
@@ -306,7 +304,7 @@ final class GameViewController: UIViewController {
     func recordTime() -> String {
         let savedDate = Date()
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd.MM.yy"
+        formatter.dateFormat = GameConstants.Strings.dateFormat
         let savedRaceDate = formatter.string(from: savedDate)
         return savedRaceDate
     }
@@ -456,11 +454,11 @@ final class GameViewController: UIViewController {
         mainPod.layer.removeAllAnimations()
         mainPod.transform = .identity  // this 2 line of code helps prevent the animation from freezing after a restart
         
-        let alert = UIAlertController(title: "Game Over", message: "Yor record is \(score)", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Exit", style: .default, handler: { _ in
+        let alert = UIAlertController(title: GameConstants.Strings.gameOverAlertTitle, message: "Yor record is \(score)", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: GameConstants.Strings.gameOverExitButton, style: .default, handler: { _ in
             self.exitToMainMenu()
         }))
-        alert.addAction(UIAlertAction(title: "Restart", style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: GameConstants.Strings.gameOverRestartButton, style: .default, handler: { _ in
             self.reStartGame()
         }))
         present(alert,animated: true)
@@ -542,7 +540,7 @@ final class GameViewController: UIViewController {
     
     private func explosionAnimation(at center: CGPoint) {
         let explosionSize = CGSize(width: 100, height: 100)
-        let explosion = UIImageView(image: UIImage(named: "explosionOne"))
+        let explosion = UIImageView(image: UIImage(named: GameConstants.Strings.explosionAnimationPic))
         
         explosion.frame = CGRect(
             x: center.x - explosionSize.width / 2,
@@ -576,6 +574,4 @@ final class GameViewController: UIViewController {
         }
         return swichingFlag
     }
-    
-    
 }
