@@ -25,8 +25,8 @@ final class SettingsViewController: UIViewController {
     }()
     private let sittingsContainer: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.white.withAlphaComponent(0.8)
-        view.layer.cornerRadius = 30
+        view.backgroundColor = UIColor.white.withAlphaComponent(SettingsConstants.Value.sittingsContainerAlphaComponent)
+        view.layer.cornerRadius = SettingsConstants.Layout.sittingsContainerCornerRadius
         return view
     }()
     private let podSettingsContainer: UIView = {
@@ -119,9 +119,9 @@ final class SettingsViewController: UIViewController {
     }()
     private let difficultySlider: UISlider = {
         let slider = UISlider()
-        slider.minimumValue = 0
-        slider.maximumValue = 2
-        slider.value = 1
+        slider.minimumValue = SettingsConstants.Value.difficultySliderMinValue
+        slider.maximumValue = SettingsConstants.Value.difficultySliderMaxValue
+        slider.value = SettingsConstants.Value.difficultySliderMidValue
         slider.isContinuous = false
         slider.minimumTrackTintColor = .red
         slider.maximumTrackTintColor = .blue
@@ -144,8 +144,8 @@ final class SettingsViewController: UIViewController {
         return label
     }()
     
-    private var currentPodIndex = 0
-    private var currentBarrierIndex = 0
+    private var currentPodIndex = 0 // for extensions?
+    private var currentBarrierIndex = 0 // for extensions?
     
     private var chosenPlayerName: String?
     private var chosenMainPod: String?
@@ -169,9 +169,9 @@ final class SettingsViewController: UIViewController {
         
         var speed: Double {
             switch self {
-            case .easy: return 2
-            case .medium:  return 3
-            case .hard: return 5
+            case .easy: return SettingsConstants.Value.easySpeed
+            case .medium:  return SettingsConstants.Value.mediumSpeed
+            case .hard: return SettingsConstants.Value.hardSpeed
             }
         }
     }
@@ -248,40 +248,40 @@ final class SettingsViewController: UIViewController {
         }
         sittingsContainer.snp.makeConstraints { make in
             make.top.equalTo(backButton.snp.bottom)
-            make.bottom.equalToSuperview().inset(30)
-            make.left.equalToSuperview().offset(10)
-            make.right.equalToSuperview().inset(10)
+            make.bottom.equalToSuperview().inset(SettingsConstants.Layout.sittingsContainerBottomOffset)
+            make.left.equalToSuperview().offset(SettingsConstants.Layout.sittingsContainerLeftRightOffset)
+            make.right.equalToSuperview().inset(SettingsConstants.Layout.sittingsContainerLeftRightOffset)
         }
         podSettingsContainer.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.3)
+            make.height.equalToSuperview().multipliedBy(SettingsConstants.Layout.multiplierForSettingsContainer)
         }
         podChoiceleftButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.left.equalToSuperview().offset(5)
+            make.left.equalToSuperview().offset(SettingsConstants.Layout.choiceRightLeftButtonOffset)
             make.width.height.equalTo(SettingsConstants.Layout.buttonsHeight)
         }
         podChoiceRightButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.right.equalToSuperview().inset(5)
+            make.right.equalToSuperview().inset(SettingsConstants.Layout.choiceRightLeftButtonOffset)
             make.width.height.equalTo(SettingsConstants.Layout.buttonsHeight)
         }
         podLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(10)
+            make.top.equalToSuperview().offset(SettingsConstants.Layout.podLabelTopOffset)
             make.left.equalTo(podChoiceleftButton.snp.right)
             make.right.equalTo(podChoiceRightButton.snp.left)
-            make.height.equalTo(20)
+            make.height.equalTo(SettingsConstants.Layout.podLabelHeight)
         }
         mainPodImage.snp.makeConstraints { make in
-            make.top.equalTo(podLabel.snp.bottom).offset(5)
+            make.top.equalTo(podLabel.snp.bottom).offset(SettingsConstants.Layout.mainPodImageTopBottomOffset)
             make.left.equalTo(podChoiceleftButton.snp.right)
             make.right.equalTo(podChoiceRightButton.snp.left)
-            make.bottom.equalToSuperview().inset(5)
+            make.bottom.equalToSuperview().inset(SettingsConstants.Layout.mainPodImageTopBottomOffset)
         }
         barrierSettingsContainer.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalTo(podSettingsContainer.snp.bottom)
-            make.height.equalToSuperview().multipliedBy(0.3)
+            make.height.equalToSuperview().multipliedBy(SettingsConstants.Layout.multiplierForSettingsContainer)
         }
         barrierChoiceleftButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
@@ -294,30 +294,30 @@ final class SettingsViewController: UIViewController {
             make.width.height.equalTo(SettingsConstants.Layout.buttonsHeight)
         }
         barrierLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(5)
+            make.top.equalToSuperview().offset(SettingsConstants.Layout.barrierLabelTopOffset)
             make.left.equalTo(barrierChoiceleftButton.snp.right)
             make.right.equalTo(barrierChoiceRightButton.snp.left)
-            make.height.equalTo(20)
+            make.height.equalTo(SettingsConstants.Layout.barrierLabelHeight)
         }
         barrierImage.snp.makeConstraints { make in
-            make.top.equalTo(barrierLabel.snp.bottom).offset(5)
+            make.top.equalTo(barrierLabel.snp.bottom).offset(SettingsConstants.Layout.barrierImageTopBottomOffset)
             make.left.equalTo(barrierChoiceleftButton.snp.right)
             make.right.equalTo(barrierChoiceRightButton.snp.left)
-            make.bottom.equalToSuperview().inset(5)
+            make.bottom.equalToSuperview().inset(SettingsConstants.Layout.barrierImageTopBottomOffset)
         }
         userNameContainer.snp.makeConstraints { make in
             make.top.equalTo(barrierSettingsContainer.snp.bottom)
             make.left.right.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.2)
+            make.height.equalToSuperview().multipliedBy(SettingsConstants.Layout.multiplierForUserNameContainer)
         }
         userName.snp.makeConstraints { make in
-            make.centerY.equalToSuperview().multipliedBy(1.25)
-            make.left.equalToSuperview().offset(5)
-            make.right.equalToSuperview().inset(5)
+            make.centerY.equalToSuperview().multipliedBy(SettingsConstants.Layout.multiplierForUserName)
+            make.left.equalToSuperview().offset(SettingsConstants.Layout.userNameLeftRightOffset)
+            make.right.equalToSuperview().inset(SettingsConstants.Layout.userNameLeftRightOffset)
         }
         userNameLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.bottom.equalTo(userName.snp.top).offset(-5)
+            make.bottom.equalTo(userName.snp.top).offset(-SettingsConstants.Layout.userNameLeftRightOffset)
         }
         sliderContainer.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
@@ -325,8 +325,8 @@ final class SettingsViewController: UIViewController {
             make.bottom.equalToSuperview()
         }
         difficultySlider.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(20)
-            make.right.equalToSuperview().inset(20)
+            make.left.equalToSuperview().offset(SettingsConstants.Layout.difficultySliderLeftRightOffset)
+            make.right.equalToSuperview().inset(SettingsConstants.Layout.difficultySliderLeftRightOffset)
             make.centerY.equalToSuperview()
         }
         sliderDifficultyLabel.snp.makeConstraints { make in
@@ -335,20 +335,21 @@ final class SettingsViewController: UIViewController {
         }
         difficultyLevelLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.bottom.equalTo(difficultySlider.snp.top).offset(-5)
+            make.bottom.equalTo(difficultySlider.snp.top).offset(-SettingsConstants.Layout.difficultyLevelLabelBottomOffset)
         }
     }
     
     private func reloadSettings() {
-        guard let savedSettings = UserDefaults.standard.value(SavedSettins.self, forKey: SettingsKeys.playerSettings) else { return }
+        guard let savedSettings = UserDefaults.standard.value(SavedSettins.self, forKey: SettingsConstants.userDefaults.playerSettings) else { return }
         mainPodImage.image = UIImage(named: savedSettings.selectedPod)
         barrierImage.image = UIImage(named: savedSettings.barrierName)
         userName.text = savedSettings.playerName
         sliderDifficultyLabel.text = savedSettings.difficultyLevel
-        difficultySlider.value = chosenSliderPosition ?? 1
+        difficultySlider.value = chosenSliderPosition ?? SettingsConstants.Value.difficultySliderMidValue
     }
+    
     private func preLoadSavedSettings() {
-        if let saved = UserDefaults.standard.value(SavedSettins.self, forKey: SettingsKeys.playerSettings) {
+        if let saved = UserDefaults.standard.value(SavedSettins.self, forKey: SettingsConstants.userDefaults.playerSettings) {
             chosenPlayerName = saved.playerName
             chosenMainPod = saved.selectedPod
             chosenBarrier = saved.barrierName
@@ -391,6 +392,7 @@ final class SettingsViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
+    
     @objc private func keyboardWillShow(_ notification: Notification) {
         guard let info = notification.userInfo,
               let duration = (info[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue,
@@ -402,11 +404,11 @@ final class SettingsViewController: UIViewController {
         let avilableSpace = screenHeight - keyboardHeight
         
         if userNameMaxY > avilableSpace {
-            let shift = userNameMaxY - keyboardFrame.minY + 5
+            let shift = userNameMaxY - keyboardFrame.minY + SettingsConstants.Layout.keyboardWillShowOffsetBetweenKeyboardAndTextfield
             
             sittingsContainer.snp.updateConstraints { make in
                 make.top.equalTo(backButton.snp.bottom).inset(shift)
-                make.bottom.equalToSuperview().inset(30 + shift)
+                make.bottom.equalToSuperview().inset(SettingsConstants.Layout.keyboardWillShowSittings + shift)
             }
         }
         UIView.animate(withDuration: duration) {
@@ -419,8 +421,8 @@ final class SettingsViewController: UIViewController {
         guard let info = notification.userInfo,
               let duration = (info[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue else { return }
         sittingsContainer.snp.updateConstraints { make in
-            make.top.equalTo(backButton.snp.bottom).offset(10)
-            make.bottom.equalToSuperview().inset(30)
+            make.top.equalTo(backButton.snp.bottom).offset(SettingsConstants.Layout.keyboardWillHideTop)
+            make.bottom.equalToSuperview().inset(SettingsConstants.Layout.keyboardWillHideBottom)
         }
         UIView.animate(withDuration: duration) {
             self.view.layoutIfNeeded()
@@ -464,17 +466,15 @@ final class SettingsViewController: UIViewController {
     
     private func saveSettings () {
         
-        let savedPlayerSettings = SavedSettins(selectedPod: chosenMainPod ?? Images.mainPod,
-                                               barrierName: chosenBarrier ?? Images.firstRock,
+        let savedPlayerSettings = SavedSettins(selectedPod: chosenMainPod ?? SettingsConstants.Strings.defaultPod,
+                                               barrierName: chosenBarrier ?? Images.firstRock,     // will replaced for track chose
                                                playerName: chosenPlayerName ?? SettingsConstants.Strings.defaultName,
                                                difficultyLevel: chosenDifficult ?? SettingsConstants.Strings.medium,
-                                               difficultyLevelValue: chosenDifficultValue ?? 8,
-                                               difficultySliderValue: chosenSliderPosition ?? 1
+                                               difficultyLevelValue: chosenDifficultValue ?? DifficultyLevel.medium.speed ,
+                                               difficultySliderValue: chosenSliderPosition ?? SettingsConstants.Value.difficultySliderMidValue
        )
-        UserDefaults.standard.set(encodable: savedPlayerSettings, forKey: SettingsKeys.playerSettings)
-        
+        UserDefaults.standard.set(encodable: savedPlayerSettings, forKey: SettingsConstants.userDefaults.playerSettings)
     }
-   
 }
 // MARK: - Extension 
 extension SettingsViewController: UITextFieldDelegate {
@@ -484,7 +484,7 @@ extension SettingsViewController: UITextFieldDelegate {
         guard let stringRange = Range(range, in: name) else { return false }
         let newName = name.replacingCharacters(in: stringRange, with: string)
         chosenPlayerName = newName
-        return newName.count <= 10
+        return newName.count <= 10 // Maximum number of characters for a username
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

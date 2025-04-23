@@ -8,7 +8,6 @@
 import Foundation
 // MARK: - Extension
 enum SettingsKeys {
-    
     static let pod = "pod"
     static let barrier = "barrier"
     static let playerSettings = "player"
