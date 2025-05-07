@@ -62,7 +62,7 @@ final class GameViewController: UIViewController {
     
     private let trackImages: [UIImageView] = (0..<3).map { _ in
         let imageView = UIImageView()
-        imageView.image = UIImage(named: Images.track)
+        imageView.image = UIImage(named: Images.track) 
         return imageView
     }
     
@@ -108,11 +108,7 @@ final class GameViewController: UIViewController {
     
     private var podStartPosition: CGPoint = .zero // create start position for restar game
     
-    private var trackDisplayLink: CADisplayLink?
-    private var enemyDisplayLink: CADisplayLink?
-    private var obstacleOneDisplayLink: CADisplayLink?
-    private var obstacleTwoDisplayLink: CADisplayLink?
-    private var collisionDisplayLink: CADisplayLink?
+    private var gameDisplayLink: CADisplayLink?
     
     private var enemyPodPassed = false
     private var rockOnePassed = false
@@ -133,12 +129,6 @@ final class GameViewController: UIViewController {
         configurationGameUI()
     }
     
-    //    override func viewWillDisappear(_ animated: Bool) {
-    //        super.viewWillDisappear(animated)
-    //        if let presented = self.presentedViewController {
-    //            presented.dismiss(animated: false, completion: nil)
-    //        }
-    //    }
     // MARK: - UI configutarion
     private func configurationGameUI() {
         
@@ -193,7 +183,6 @@ final class GameViewController: UIViewController {
         rightButton.addAction(rightActionPressed, for: .touchUpInside)
         backButton.addAction(backActionPressed, for: .touchUpInside)
         reloadSettings()
-        
         addCoundown()
         countdownAnimation(number: 3)
     }
@@ -309,7 +298,7 @@ final class GameViewController: UIViewController {
         return savedRaceDate
     }
     
-    @objc private func updateTracks() {
+     private func updateTracks() {
         for track in trackImages {
             track.frame.origin.y += chosenGameSpeed ?? 3
         }
@@ -362,7 +351,7 @@ final class GameViewController: UIViewController {
         })
     }
     
-    @objc private func enemyMovement() {
+     private func enemyMovement() {
         enemyPod.frame.origin.y += (chosenGameSpeed ?? 3) - 1
         if enemyPod.frame.origin.y > view.frame.height {
             enemyPod.frame.origin.y = -enemyPod.frame.height
@@ -373,7 +362,7 @@ final class GameViewController: UIViewController {
         }
     }
     
-    @objc private func obstacleOneMovement() {
+     private func obstacleOneMovement() {
         rockOne.frame.origin.y += chosenGameSpeed ?? 3
         if rockOne.frame.origin.y > view.frame.height {
             rockOne.frame.origin.y = -rockOne.frame.origin.y
@@ -383,7 +372,7 @@ final class GameViewController: UIViewController {
             self.rockOne.center.x = rockOnePosition
         }
     }
-    @objc private func obstacleTwoMovement() {
+     private func obstacleTwoMovement() {
         rockTwo.frame.origin.y += chosenGameSpeed ?? 3
         if rockTwo.frame.origin.y > view.frame.height {
             rockTwo.frame.origin.y = -rockTwo.frame.origin.y
@@ -394,7 +383,7 @@ final class GameViewController: UIViewController {
         }
     }
     
-    @objc private func dynamicScoreChange() {
+    private func dynamicScoreChange() {
         if score >= nextScoreThreshold {
             chosenGameSpeed! += 0.5
             nextScoreThreshold += 10
@@ -404,24 +393,8 @@ final class GameViewController: UIViewController {
     
     
     private func startGame() {
-        collisionDisplayLink = CADisplayLink(target: self, selector: #selector(checkCollision))
-        collisionDisplayLink?.add(to: .main, forMode: .common)
-        
-        trackDisplayLink = CADisplayLink(target: self, selector: #selector(updateTracks))
-        trackDisplayLink?.add(to: .main, forMode: .common)
-        
-        enemyDisplayLink = CADisplayLink(target: self, selector: #selector(enemyMovement))
-        enemyDisplayLink?.add(to: .main, forMode: .common)
-        
-        obstacleOneDisplayLink = CADisplayLink(target: self, selector: #selector(obstacleOneMovement))
-        obstacleOneDisplayLink?.add(to: .main, forMode: .common)
-        
-        obstacleTwoDisplayLink = CADisplayLink(target: self, selector: #selector(obstacleTwoMovement))
-        obstacleTwoDisplayLink?.add(to: .main, forMode: .common)
-        
-        let link = CADisplayLink(target: self, selector: #selector(dynamicScoreChange))
-        link.add(to: .main, forMode: .common)
-        
+        gameDisplayLink = CADisplayLink(target: self, selector: #selector(startGameplay))
+        gameDisplayLink?.add(to: .main, forMode: .common)
     }
     
     private func reStartGame() {
@@ -468,33 +441,16 @@ final class GameViewController: UIViewController {
     
     
     private func stopGame() {
-        trackDisplayLink?.invalidate()
-        enemyDisplayLink?.invalidate()
-        collisionDisplayLink?.invalidate()
-        obstacleOneDisplayLink?.invalidate()
-        obstacleTwoDisplayLink?.invalidate()
-        
-        
-        trackDisplayLink = nil
-        enemyDisplayLink = nil
-        collisionDisplayLink = nil
-        obstacleOneDisplayLink = nil
-        obstacleTwoDisplayLink = nil
+        gameDisplayLink?.invalidate()
+        gameDisplayLink = nil
     }
     
     private func pauseGame() {
-        trackDisplayLink?.isPaused = true
-        enemyDisplayLink?.isPaused = true
-        collisionDisplayLink?.isPaused = true
-        obstacleOneDisplayLink?.isPaused = true
-        obstacleTwoDisplayLink?.isPaused = true
+        gameDisplayLink?.isPaused = true
     }
+    
     private func resumeGame() {
-        trackDisplayLink?.isPaused = false
-        enemyDisplayLink?.isPaused = false
-        collisionDisplayLink?.isPaused = false
-        obstacleOneDisplayLink?.isPaused = false
-        obstacleTwoDisplayLink?.isPaused = false
+        gameDisplayLink?.isPaused = false
     }
     
     private func freezeAnimations() {
@@ -508,7 +464,16 @@ final class GameViewController: UIViewController {
         }
     }
     
-    @objc private func checkCollision() {
+    @objc private func startGameplay() {
+        updateTracks()
+        enemyMovement()
+        obstacleOneMovement()
+        obstacleTwoMovement()
+        checkCollision()
+        dynamicScoreChange()
+    }
+    
+     private func checkCollision() {
         guard let mainFrame = mainPod.layer.presentation()?.frame,
               let enemyFrame = enemyPod.layer.presentation()?.frame,
               let rockOneFrame = rockOne.layer.presentation()?.frame,
@@ -537,6 +502,7 @@ final class GameViewController: UIViewController {
             gameOver()
         }
     }
+    
     
     private func explosionAnimation(at center: CGPoint) {
         let explosionSize = CGSize(width: 100, height: 100)

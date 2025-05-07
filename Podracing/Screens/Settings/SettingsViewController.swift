@@ -51,7 +51,7 @@ final class SettingsViewController: UIViewController {
     }()
     private var mainPodImage: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: Images.mainPod)
+        view.image = UIImage(named: Images.mainPod)   // need to change 
         view.contentMode = .scaleAspectFit
         return view
     }()
@@ -465,7 +465,9 @@ final class SettingsViewController: UIViewController {
 //    }
     
     private func saveSettings () {
-        
+        if chosenPlayerName?.isEmpty ?? true {
+            chosenPlayerName = SettingsConstants.Strings.defaultName
+        }
         let savedPlayerSettings = SavedSettins(selectedPod: chosenMainPod ?? SettingsConstants.Strings.defaultPod,
                                                barrierName: chosenBarrier ?? Images.firstRock,     // will replaced for track chose
                                                playerName: chosenPlayerName ?? SettingsConstants.Strings.defaultName,
@@ -480,7 +482,7 @@ final class SettingsViewController: UIViewController {
 extension SettingsViewController: UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let name = userName.text ?? ""
+        let name = userName.text ?? SettingsConstants.Strings.defaultName
         guard let stringRange = Range(range, in: name) else { return false }
         let newName = name.replacingCharacters(in: stringRange, with: string)
         chosenPlayerName = newName
