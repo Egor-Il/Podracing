@@ -46,13 +46,6 @@ final class MenuViewController: UIViewController {
         button.titleLabel?.font = UIFont(name: MenuConstants.Font.fontName, size: MenuConstants.Font.buttonsSize)
         return button
     }()
-    //    private let createButton: (String) -> UIButton = { buttonTitle in
-    //        let button = UIButton(type: .system)
-    //        button.setTitle(buttonTitle, for: .normal)
-    //        button.setTitleColor(.green, for: .normal)
-    //        button.titleLabel?.font = UIFont(name: Font.fontName, size: Font.buttonFont)
-    //        return button
-    //    }
     // MARK: - Life cycle functions
     override func viewDidLoad() {
         super.viewDidLoad()

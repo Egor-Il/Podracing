@@ -8,7 +8,7 @@ class RaceTrackTestViewController: UIViewController {
 
     private let trackImages: [UIImageView] = (0..<3).map { _ in
         let imageView = UIImageView()
-        imageView.image = UIImage(named: Images.track)
+        imageView.image = UIImage(named: "moon")
         return imageView
     }
 
