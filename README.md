@@ -9,10 +9,10 @@ Gameplay Video:
 
 Screenshots:
 
-![Main Menu](https://drive.google.com/uc?export=view&id=17a-tYk-xVmR3ZliiiJbP7KUidLAxkNt-)
+![Main Menu](https://drive.google.com/uc?export=view&id=17a-tYk-xVmR3ZliiiJbP7KUidLAxkNt-)  ![Game Screen](https://drive.google.com/uc?export=view&id=1n2Gdl002sM9dACH2cmvR7bqzQu__9kE3)
 
 
-![Game Screen](https://drive.google.com/uc?export=view&id=1n2Gdl002sM9dACH2cmvR7bqzQu__9kE3)
+
 
 
 
