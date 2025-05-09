@@ -30,14 +30,14 @@ final class GameViewController: UIViewController {
     // MARK: - Property
     private let backButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(Buttons.buttonBackLable, for: .normal)
+        button.setTitle(GameConstants.Strings.backButton, for: .normal)
         button.setTitleColor(.green, for: .normal)
         button.titleLabel?.font = UIFont(name: GameConstants.Font.fontName, size: GameConstants.Font.buttonBackFontSize)
         return button
     }()
     private let leftButton: UIButton = {
         var button = UIButton(type: .system)
-        if let leftArrowImage = UIImage(systemName: "arrowshape.left.fill") {
+        if let leftArrowImage = UIImage(systemName: GameConstants.Strings.leftButton) {
             let tintedArrowImage = leftArrowImage.withTintColor(.white, renderingMode: .alwaysOriginal)
             button.setImage(tintedArrowImage, for: .normal)
             button.backgroundColor = .systemBrown
@@ -46,7 +46,7 @@ final class GameViewController: UIViewController {
     }()
     private let rightButton: UIButton = {
         let button = UIButton(type: .system)
-        if let leftArrowImage = UIImage(systemName: "arrowshape.right.fill") {
+        if let leftArrowImage = UIImage(systemName: GameConstants.Strings.rightButton) {
             let tintedArrowImage = leftArrowImage.withTintColor(.white, renderingMode: .alwaysOriginal)
             button.setImage(tintedArrowImage, for: .normal)
             button.backgroundColor = .systemBrown
@@ -55,39 +55,39 @@ final class GameViewController: UIViewController {
     }()
     private var mainPod: UIImageView = {
         var pod = UIImageView()
-        let mainPod = UIImage(named: Images.mainPod)
+        let mainPod = UIImage(named: GameConstants.Strings.mainPodPic)
         pod.image = mainPod
         return pod
     }()
     
     private let trackImages: [UIImageView] = (0..<3).map { _ in
         let imageView = UIImageView()
-        imageView.image = UIImage(named: Images.track) 
+        imageView.image = UIImage(named: GameConstants.Strings.trackPic)
         return imageView
     }
     
     private let rockOne: UIImageView = {
         let firstRock = UIImageView()
-        let stoneOneImage = UIImage(named: Images.firstRock) // shoud rename in case changing
+        let stoneOneImage = UIImage(named: GameConstants.Strings.stoneOnePic)
         firstRock.image = stoneOneImage
         return firstRock
     }()
     private let rockTwo: UIImageView = {
         let secondRock = UIImageView()
-        let stoneTwoImage = UIImage(named: Images.secondRock) //  shoud rename in case changing in settings
+        let stoneTwoImage = UIImage(named: GameConstants.Strings.stoneTwoPic)
         secondRock.image = stoneTwoImage
         return secondRock
     }()
     private var enemyPod: UIImageView = {
         let pod = UIImageView()
-        let enemyPod = UIImage(named: Images.podTwo)
+        let enemyPod = UIImage(named: GameConstants.Strings.enemyPod)
         pod.image = enemyPod
         return pod
     }()
     
     private lazy var scoreLable: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: GameConstants.Font.fontName, size: GameConstants.Font.scoreLableFontSize)
+        label.font = UIFont(name: GameConstants.Font.fontName, size: GameConstants.Font.scoreLablFontSize)
         label.textColor = .white
         label.text = "Score: \(score)"
         return label
@@ -161,13 +161,7 @@ final class GameViewController: UIViewController {
         
         setStartingPosition()
         // MARK: - Animation function call
-      //  startGame()
-     //   startTimerForObstacles()
-    //    podAnimation()
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-//            self.startGame()
-//            self.podAnimation()
-//        }
+ 
         
         // MARK: - Left/Right buttons setups
         let backActionPressed = UIAction { _ in
@@ -193,8 +187,8 @@ final class GameViewController: UIViewController {
             make.top.left.equalToSuperview().offset(GameConstants.Layout.backButtonOffset)
         }
         scoreLable.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(GameConstants.Layout.scoreLableOffsetTop)
-            make.right.equalToSuperview().inset(GameConstants.Layout.scoreLableOffsetRight)
+            make.top.equalToSuperview().offset(GameConstants.Layout.scoreLablOffsetTop)
+            make.right.equalToSuperview().inset(GameConstants.Layout.scoreLablOffsetRight)
         }
         leftButton.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(Constraint.movementButtonOffSetSides)
@@ -280,7 +274,7 @@ final class GameViewController: UIViewController {
     }
     // MARK: - Buttons Setup
     private func reloadSettings() {
-        guard let savedSettings = UserDefaults.standard.value(SavedSettins.self, forKey: SettingsConstants.userDefaults.playerSettings) else {
+        guard let savedSettings = UserDefaults.standard.value(SavedSettings.self, forKey: SettingsConstants.userDefaults.playerSettings) else {
             playerName = GameConstants.Strings.defaultPlayerName
             return
         }

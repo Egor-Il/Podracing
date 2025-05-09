@@ -40,7 +40,7 @@ final class LeaderboardConstants {
         static let playerNameOffset: CGFloat = 5
     }
     
-    enum userDefaults {
+    enum UserDefaults {
         static let userDefaultsKey = "LeaderboardEntries"
     }
     

@@ -75,17 +75,16 @@ final class LeaderboardViewController: UIViewController {
         table.backgroundColor = .clear
         table.allowsSelection = false
         table.showsVerticalScrollIndicator = false
-        // table.separatorInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5) // - полоса разделения
         return table
     }()
     
     // MARK: - Life cycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        configuratLeaderBoardUI()
+        configureLeaderboardUI()
     }
     // MARK: - Func Actions
-    private func configuratLeaderBoardUI() {
+    private func configureLeaderboardUI() {
         view.addSubview(leaderboardImage)
         view.addSubview(buttonBack)
         view.addSubview(buttonClear)
@@ -175,8 +174,6 @@ extension LeaderboardViewController: UITableViewDelegate, UITableViewDataSource 
         
         let entry = LeaderboardManager.shared.getRecord()[indexPath.row]
         cell.configure(with: entry)
-        //        cell.contentView.backgroundColor = .clear
-        //        cell.backgroundColor = .gray
         return cell
     }
 }

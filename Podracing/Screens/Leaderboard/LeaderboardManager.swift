@@ -17,7 +17,7 @@ final class LeaderboardManager {
     
     static let shared = LeaderboardManager()
     private var leaderboardEntries: [LeaderboardEntry] = []
-    private let userDefaultsKey = LeaderboardConstants.userDefaults.userDefaultsKey
+    private let userDefaultsKey = LeaderboardConstants.UserDefaults.userDefaultsKey
     
     private init() {
         loadFromStorage()

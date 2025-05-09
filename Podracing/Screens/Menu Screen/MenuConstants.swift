@@ -24,7 +24,7 @@ final class MenuConstants {
     enum Layout {
         static let gameNameLabelTopOffset: CGFloat = 70
         static let buttonsOffset: CGFloat = 40
-        static let buttonsConteinerHeight: CGFloat = 150
+        static let buttonsContainerHeight: CGFloat = 150
     }
    
     enum Font {

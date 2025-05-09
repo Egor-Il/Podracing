@@ -12,7 +12,7 @@ final class GameConstants {
     enum Font {
         static let fontName = "Starjedi"
         static let buttonBackFontSize: CGFloat = 18
-        static let scoreLableFontSize: CGFloat = 18
+        static let scoreLablFontSize: CGFloat = 18
         static let countdownLabelFontSize: CGFloat = 10
     }
     
@@ -23,11 +23,14 @@ final class GameConstants {
     
     enum Layout {
         static let backButtonOffset: CGFloat = 40
-        static let scoreLableOffsetTop: CGFloat = 40
-        static let scoreLableOffsetRight: CGFloat = 60
+        static let scoreLablOffsetTop: CGFloat = 40
+        static let scoreLablOffsetRight: CGFloat = 60
     }
     
     enum Strings {
+        static let backButton = "back"
+        static let leftButton = "arrowshape.left.fill"
+        static let rightButton = "arrowshape.right.fill"
         static let countdownLabelGo = "go"
         static let backAlertTitle = "Are you sure you want to exit the game"
         static let backAlertMessage = "all progress will be lost"
@@ -36,10 +39,14 @@ final class GameConstants {
         static let defaultPlayerName = "skywalker"
         static let dateFormat = "dd.MM.yy"
         static let gameOverAlertTitle = "game over"
-//        static let gameOverAlertMessage = "Yor record is \(score)"
         static let gameOverExitButton = "exit"
         static let gameOverRestartButton = "restart"
         static let explosionAnimationPic = "explosionOne"
+        static let mainPodPic = "mainPod"
+        static let trackPic = "track"
+        static let stoneOnePic = "stoneOne"
+        static let stoneTwoPic = "stoneTwo"
+        static let enemyPod = "podTwo"
     }
     
 }

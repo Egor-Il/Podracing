@@ -23,10 +23,10 @@ final class SettingsViewController: UIViewController {
         image.image = settingImage
         return image
     }()
-    private let sittingsContainer: UIView = {
+    private let settingsContainer: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.white.withAlphaComponent(SettingsConstants.Value.sittingsContainerAlphaComponent)
-        view.layer.cornerRadius = SettingsConstants.Layout.sittingsContainerCornerRadius
+        view.backgroundColor = UIColor.white.withAlphaComponent(SettingsConstants.Value.settingsContainerAlphaComponent)
+        view.layer.cornerRadius = SettingsConstants.Layout.settingsContainerCornerRadius
         return view
     }()
     private let podSettingsContainer: UIView = {
@@ -51,7 +51,7 @@ final class SettingsViewController: UIViewController {
     }()
     private var mainPodImage: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: Images.mainPod)   // need to change 
+        view.image = UIImage(named: SettingsConstants.Strings.defaultPod)
         view.contentMode = .scaleAspectFit
         return view
     }()
@@ -144,8 +144,8 @@ final class SettingsViewController: UIViewController {
         return label
     }()
     
-    private var currentPodIndex = 0 // for extensions?
-    private var currentBarrierIndex = 0 // for extensions?
+    private var currentPodIndex = 0
+    private var currentBarrierIndex = 0
     
     private var chosenPlayerName: String?
     private var chosenMainPod: String?
@@ -190,21 +190,21 @@ final class SettingsViewController: UIViewController {
         configuratNotifications()
         view.addSubview(settingImageView)
         view.addSubview(backButton)
-        view.addSubview(sittingsContainer)
-        sittingsContainer.addSubview(podSettingsContainer)
+        view.addSubview(settingsContainer)
+        settingsContainer.addSubview(podSettingsContainer)
         podSettingsContainer.addSubview(podChoiceleftButton)
         podSettingsContainer.addSubview(podChoiceRightButton)
         podSettingsContainer.addSubview(mainPodImage)
         podSettingsContainer.addSubview(podLabel)
-        sittingsContainer.addSubview(barrierSettingsContainer)
+        settingsContainer.addSubview(barrierSettingsContainer)
         barrierSettingsContainer.addSubview(barrierChoiceleftButton)
         barrierSettingsContainer.addSubview(barrierChoiceRightButton)
         barrierSettingsContainer.addSubview(barrierImage)
         barrierSettingsContainer.addSubview(barrierLabel)
-        sittingsContainer.addSubview(userNameContainer)
+        settingsContainer.addSubview(userNameContainer)
         userNameContainer.addSubview(userName)
         userNameContainer.addSubview(userNameLabel)
-        sittingsContainer.addSubview(sliderContainer)
+        settingsContainer.addSubview(sliderContainer)
         sliderContainer.addSubview(difficultyLevelLabel)
         sliderContainer.addSubview(difficultySlider)
         sliderContainer.addSubview(sliderDifficultyLabel)
@@ -246,11 +246,11 @@ final class SettingsViewController: UIViewController {
         backButton.snp.makeConstraints { make in
             make.left.top.equalToSuperview().offset(SettingsConstants.Layout.buttonsOffset)
         }
-        sittingsContainer.snp.makeConstraints { make in
+        settingsContainer.snp.makeConstraints { make in
             make.top.equalTo(backButton.snp.bottom)
-            make.bottom.equalToSuperview().inset(SettingsConstants.Layout.sittingsContainerBottomOffset)
-            make.left.equalToSuperview().offset(SettingsConstants.Layout.sittingsContainerLeftRightOffset)
-            make.right.equalToSuperview().inset(SettingsConstants.Layout.sittingsContainerLeftRightOffset)
+            make.bottom.equalToSuperview().inset(SettingsConstants.Layout.settingsContainerBottomOffset)
+            make.left.equalToSuperview().offset(SettingsConstants.Layout.settingsContainerLeftRightOffset)
+            make.right.equalToSuperview().inset(SettingsConstants.Layout.settingsContainerLeftRightOffset)
         }
         podSettingsContainer.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview()
@@ -340,7 +340,7 @@ final class SettingsViewController: UIViewController {
     }
     
     private func reloadSettings() {
-        guard let savedSettings = UserDefaults.standard.value(SavedSettins.self, forKey: SettingsConstants.userDefaults.playerSettings) else { return }
+        guard let savedSettings = UserDefaults.standard.value(SavedSettings.self, forKey: SettingsConstants.userDefaults.playerSettings) else { return }
         mainPodImage.image = UIImage(named: savedSettings.selectedPod)
         barrierImage.image = UIImage(named: savedSettings.barrierName)
         userName.text = savedSettings.playerName
@@ -349,7 +349,7 @@ final class SettingsViewController: UIViewController {
     }
     
     private func preLoadSavedSettings() {
-        if let saved = UserDefaults.standard.value(SavedSettins.self, forKey: SettingsConstants.userDefaults.playerSettings) {
+        if let saved = UserDefaults.standard.value(SavedSettings.self, forKey: SettingsConstants.userDefaults.playerSettings) {
             chosenPlayerName = saved.playerName
             chosenMainPod = saved.selectedPod
             chosenBarrier = saved.barrierName
@@ -406,9 +406,9 @@ final class SettingsViewController: UIViewController {
         if userNameMaxY > avilableSpace {
             let shift = userNameMaxY - keyboardFrame.minY + SettingsConstants.Layout.keyboardWillShowOffsetBetweenKeyboardAndTextfield
             
-            sittingsContainer.snp.updateConstraints { make in
+            settingsContainer.snp.updateConstraints { make in
                 make.top.equalTo(backButton.snp.bottom).inset(shift)
-                make.bottom.equalToSuperview().inset(SettingsConstants.Layout.keyboardWillShowSittings + shift)
+                make.bottom.equalToSuperview().inset(SettingsConstants.Layout.keyboardWillShowSettings + shift)
             }
         }
         UIView.animate(withDuration: duration) {
@@ -420,7 +420,7 @@ final class SettingsViewController: UIViewController {
     @objc private func keyboardWillHide(_ notification: Notification) {
         guard let info = notification.userInfo,
               let duration = (info[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue else { return }
-        sittingsContainer.snp.updateConstraints { make in
+        settingsContainer.snp.updateConstraints { make in
             make.top.equalTo(backButton.snp.bottom).offset(SettingsConstants.Layout.keyboardWillHideTop)
             make.bottom.equalToSuperview().inset(SettingsConstants.Layout.keyboardWillHideBottom)
         }
@@ -439,7 +439,6 @@ final class SettingsViewController: UIViewController {
         sender.value = roundedValue
         
         let difficultyLevels: [DifficultyLevel] = [.easy, .medium, .hard]
-        guard Int(roundedValue) < difficultyLevels.count else { return }
         let selectedDifficulty = difficultyLevels[Int(roundedValue)]
         
         sliderDifficultyLabel.text = selectedDifficulty.rawValue
@@ -448,28 +447,12 @@ final class SettingsViewController: UIViewController {
         chosenSliderPosition = roundedValue
     }
     
-//    @objc func difficultyChanged(_ sender: UISlider) {
-//        let roundedValue = round(sender.value)
-//        sender.value = roundedValue
-//        if roundedValue == 0 {
-//            sliderDifficultyLabel.text = "easy"
-//        } else if roundedValue == 1 {
-//            sliderDifficultyLabel.text = "medium"
-//        } else if roundedValue == 2 {
-//            sliderDifficultyLabel.text = "hard"
-//        }
-//        if let text = sliderDifficultyLabel.text {
-//            chosenDifficult = text
-//        }
-//        chosenDifficultValue = roundedValue
-//    }
-    
     private func saveSettings () {
         if chosenPlayerName?.isEmpty ?? true {
             chosenPlayerName = SettingsConstants.Strings.defaultName
         }
-        let savedPlayerSettings = SavedSettins(selectedPod: chosenMainPod ?? SettingsConstants.Strings.defaultPod,
-                                               barrierName: chosenBarrier ?? Images.firstRock,     // will replaced for track chose
+        let savedPlayerSettings = SavedSettings(selectedPod: chosenMainPod ?? SettingsConstants.Strings.defaultPod,
+                                               barrierName: chosenBarrier ?? SettingsConstants.Strings.defaultBarrier,     // will replaced for track chose
                                                playerName: chosenPlayerName ?? SettingsConstants.Strings.defaultName,
                                                difficultyLevel: chosenDifficult ?? SettingsConstants.Strings.medium,
                                                difficultyLevelValue: chosenDifficultValue ?? DifficultyLevel.medium.speed ,

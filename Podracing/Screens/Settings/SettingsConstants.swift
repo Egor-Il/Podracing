@@ -23,13 +23,14 @@ final class SettingsConstants {
         static let medium = "medium"
         static let defaultName = "Skywalker"
         static let defaultPod = "mainPod"
+        static let defaultBarrier = "stoneOne"
     }
     
     enum Layout {
         static let buttonsOffset: CGFloat = 40
         static let buttonsHeight: CGFloat = 50
-        static let sittingsContainerLeftRightOffset: CGFloat = 10
-        static let sittingsContainerBottomOffset: CGFloat = 30
+        static let settingsContainerLeftRightOffset: CGFloat = 10
+        static let settingsContainerBottomOffset: CGFloat = 30
         static let choiceRightLeftButtonOffset: CGFloat = 5
         static let podLabelTopOffset: CGFloat = 10
         static let podLabelHeight: CGFloat = 20
@@ -39,11 +40,11 @@ final class SettingsConstants {
         static let userNameLeftRightOffset: CGFloat = 5
         static let difficultySliderLeftRightOffset: CGFloat = 20
         static let difficultyLevelLabelBottomOffset: CGFloat = 5
-        static let keyboardWillShowSittings: CGFloat = 30
+        static let keyboardWillShowSettings: CGFloat = 30
         static let keyboardWillHideTop: CGFloat = 10
         static let keyboardWillHideBottom: CGFloat = 30
         static let barrierLabelTopOffset: CGFloat = 5
-        static let sittingsContainerCornerRadius: CGFloat = 30
+        static let settingsContainerCornerRadius: CGFloat = 30
         static let keyboardWillShowOffsetBetweenKeyboardAndTextfield: CGFloat = 5
         static let multiplierForSettingsContainer = 0.3
         static let multiplierForUserNameContainer = 0.2
@@ -51,7 +52,7 @@ final class SettingsConstants {
     }
     
     enum Value {
-        static let sittingsContainerAlphaComponent:CGFloat = 0.8
+        static let settingsContainerAlphaComponent:CGFloat = 0.8
         static let buttonsSize: CGFloat = 20
         static let difficultySliderMinValue: Float = 0
         static let difficultySliderMidValue: Float = 1

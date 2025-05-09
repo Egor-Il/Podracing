@@ -21,7 +21,7 @@ final class MenuViewController: UIViewController {
         return label
     }()
     
-    private let buttonsConteiner = UIView()
+    private let buttonsContainer = UIView()
     
     private let playButton: UIButton = {
         let button = UIButton(type: .system)
@@ -56,10 +56,10 @@ final class MenuViewController: UIViewController {
     private func configureMenuUI() {
         view.addSubview(menuScreen)
         view.addSubview(gameNameLabel)
-        view.addSubview(buttonsConteiner)
-        buttonsConteiner.addSubview(playButton)
-        buttonsConteiner.addSubview(boardButton)
-        buttonsConteiner.addSubview(settingButton)
+        view.addSubview(buttonsContainer)
+        buttonsContainer.addSubview(playButton)
+        buttonsContainer.addSubview(boardButton)
+        buttonsContainer.addSubview(settingButton)
         setupConstraints()
         
         let menuImage = UIImage(named: MenuConstants.Strings.menuScreenPic)
@@ -87,10 +87,10 @@ final class MenuViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.top.equalToSuperview().offset(MenuConstants.Layout.gameNameLabelTopOffset)
         }
-        buttonsConteiner.snp.makeConstraints { make in
+        buttonsContainer.snp.makeConstraints { make in
             make.top.equalTo(gameNameLabel.snp.bottom).offset(MenuConstants.Layout.buttonsOffset)
             make.left.right.equalToSuperview()
-            make.height.equalTo(MenuConstants.Layout.buttonsConteinerHeight)
+            make.height.equalTo(MenuConstants.Layout.buttonsContainerHeight)
         }
         playButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
