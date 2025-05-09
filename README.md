@@ -12,31 +12,31 @@ Screenshots:
 
 ![Main Menu](https://drive.google.com/uc?export=view&id=15E7t7S02Kri748nTIwAlFvPV_DS1cbh9)  ![Game Screen](https://drive.google.com/uc?export=view&id=1uWmlXpsYRVqA6DDHmEG0Y8iZS9DUYigm)   
 
-🛠 Core Technologies
+💻 Core Technologies
 
-Swift and UIKit: Fundamental technologies used to build the application and manage UI components, including views, buttons, and animations.
+- Swift and UIKit: Fundamental technologies used to build the application and manage UI components, including views, buttons, and animations.
 
-CADisplayLink: Used to create a game loop for rendering dynamic animations at the display’s refresh rate, ensuring smooth gameplay.
+- CADisplayLink: Used to create a game loop for rendering dynamic animations at the display’s refresh rate, ensuring smooth gameplay.
 
-UIView.animate: Utilized for smooth transitions and motion effects, creating a dynamic visual experience.
+- UIView.animate: Utilized for smooth transitions and motion effects, creating a dynamic visual experience.
 
-SnapKit: Simplifies Auto Layout with a declarative syntax, making UI code more readable and efficient.
+- SnapKit: Simplifies Auto Layout with a declarative syntax, making UI code more readable and efficient.
 
-UserDefaults: Stores player preferences, high scores, and settings persistently between app launches.
+- UserDefaults: Stores player preferences, high scores, and settings persistently between app launches.
 
-UITableView: Displays the list of player records on the leaderboard screen, utilizing a custom cell layout for better visualization.
+- UITableView: Displays the list of player records on the leaderboard screen, utilizing a custom cell layout for better visualization.
 
-UIAction and UIButton: Used for interactive navigation and control, including the back button and clear leaderboard action.
+- UIAction and UIButton: Used for interactive navigation and control, including the back button and clear leaderboard action.
 
-Navigation: Uses UINavigationController to manage screen transitions smoothly.
+- Navigation: Uses UINavigationController to manage screen transitions smoothly.
 
-Singleton Pattern: Used in LeaderboardManager to manage and persist player records efficiently.
+- Singleton Pattern: Used in LeaderboardManager to manage and persist player records efficiently.
 
-GCD (Grand Central Dispatch): Manages asynchronous tasks and ensures smooth UI updates during gameplay.
+- GCD (Grand Central Dispatch): Manages asynchronous tasks and ensures smooth UI updates during gameplay.
 
-Gesture Recognizers: Detects player interactions for responsive controls and input handling.
+- Gesture Recognizers: Detects player interactions for responsive controls and input handling.
 
-🚀 Installation
+🛠 Installation
 
 Clone the repository:
 
