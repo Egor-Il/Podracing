@@ -6,10 +6,7 @@ Podracing is a racing game inspired by the Star Wars universe, developed for iOS
 
 Gameplay Video:
 
-<video width="300" controls>
-  <source src="https://drive.google.com/uc?export=view&id=1ttx-PvBWSaHx4xYT-M3-HxdwV5_2MfCI" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+[Watch Gameplay Video](https://drive.google.com/uc?export=view&id=1ttx-PvBWSaHx4xYT-M3-HxdwV5_2MfCI)
 
 Screenshots:
 
