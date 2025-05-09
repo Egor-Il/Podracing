@@ -9,13 +9,13 @@ Gameplay Video:
 
 Screenshots:
 
-![Main Menu](https://drive.google.com/uc?export=view&id=15E7t7S02Kri748nTIwAlFvPV_DS1cbh9)  ![Game Screen](https://drive.google.com/uc?export=view&id=1n2Gdl002sM9dACH2cmvR7bqzQu__9kE3)
+![Main Menu](https://drive.google.com/uc?export=view&id=15E7t7S02Kri748nTIwAlFvPV_DS1cbh9)  ![Game Screen](https://drive.google.com/uc?export=view&id=1uWmlXpsYRVqA6DDHmEG0Y8iZS9DUYigm)
 
-https://drive.google.com/file/d/15E7t7S02Kri748nTIwAlFvPV_DS1cbh9/view?usp=share_link
+https://drive.google.com/file/d/1uWmlXpsYRVqA6DDHmEG0Y8iZS9DUYigm/view?usp=share_link
 
 https://drive.google.com/uc?export=view&id=
 
-https://drive.google.com/uc?export=view&id=15E7t7S02Kri748nTIwAlFvPV_DS1cbh9
+https://drive.google.com/uc?export=view&id=1uWmlXpsYRVqA6DDHmEG0Y8iZS9DUYigm
 
 
 🛠 Core Technologies
