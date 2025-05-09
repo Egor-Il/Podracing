@@ -52,11 +52,19 @@ open Podracing.xcworkspace
 
 📌 Roadmap
 
-Add new tracks and difficulty levels.
+- Replace obstacle selection with track selection to provide more diverse racing experiences.
 
-Integrate with Game Center for online competition.
+- Refactor and improve the obstacle generation logic to create more dynamic and engaging races.
 
-Improve graphics and animations.
+- Increase the variety of racing pods, adding unique attributes and visuals.
+
+- Introduce track-specific obstacles, where each track has its own unique challenges.
+
+- Add effects when driving off-road to enhance realism and immersion.
+
+- Implement tactile feedback (haptic responses) for collisions and off-road driving, with an option to enable or disable in settings.
+
+- Integrate Game Center for online competition and leaderboard synchronization.
 
 📄 License
 
