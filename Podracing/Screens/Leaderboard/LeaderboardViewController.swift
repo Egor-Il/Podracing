@@ -33,7 +33,7 @@ final class LeaderboardViewController: UIViewController {
     
     private let leaderboardHeader: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemGray6
+        view.backgroundColor = .white
         view.layer.cornerRadius = LeaderboardConstants.Value.cornerRadius
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.layer.masksToBounds = true
